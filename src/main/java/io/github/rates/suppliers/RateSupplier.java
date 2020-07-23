@@ -1,6 +1,6 @@
 package io.github.rates.suppliers;
 
-import io.github.rates.model.Rate;
+import io.github.rates.domain.Rate;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

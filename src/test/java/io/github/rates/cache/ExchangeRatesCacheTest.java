@@ -3,7 +3,7 @@ package io.github.rates.cache;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import io.github.rates.model.Rate;
+import io.github.rates.domain.Rate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,7 +15,7 @@ class ExchangeRatesCacheTest {
 
     @Test
     void updateCryptoCurrenciesRates() {
-        Rate rate = new Rate("test", BigDecimal.TEN);
+        Rate rate = new Rate("test", "test", BigDecimal.TEN);
         ExchangeRatesCache cache = new ExchangeRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));
@@ -25,8 +25,8 @@ class ExchangeRatesCacheTest {
 
     @Test
     void updateCryptoCurrenciesRates_updateExisted() {
-        Rate oldRate = new Rate("test", BigDecimal.ZERO);
-        Rate newRate = new Rate("test", BigDecimal.ONE);
+        Rate oldRate = new Rate("test", "test", BigDecimal.ZERO);
+        Rate newRate = new Rate("test", "test", BigDecimal.ONE);
         ExchangeRatesCache cache = new ExchangeRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(oldRate));
@@ -38,7 +38,7 @@ class ExchangeRatesCacheTest {
     @ParameterizedTest
     @ValueSource(strings = {"BTCETH", "BTCeth", "btcETH", "btceth"})
     void getCryptoCurrencyRate(String pairName) {
-        Rate rate = new Rate(pairName.toLowerCase(), BigDecimal.valueOf(23942.234));
+        Rate rate = new Rate("btc", "eth", BigDecimal.valueOf(23942.234));
         ExchangeRatesCache cache = new ExchangeRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));
@@ -56,7 +56,7 @@ class ExchangeRatesCacheTest {
 
     @Test
     void clear() {
-        Rate rate = new Rate("test", BigDecimal.TEN);
+        Rate rate = new Rate("test", "test", BigDecimal.TEN);
         ExchangeRatesCache cache = new ExchangeRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));

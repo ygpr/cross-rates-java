@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.given;
 import io.github.rates.cache.CacheUpdater;
 import io.github.rates.cache.ExchangeRatesCache;
 import io.github.rates.configurations.CacheUpdateProgram;
-import io.github.rates.model.Rate;
+import io.github.rates.domain.Rate;
 import io.github.rates.suppliers.BinanceTargetRatesSupplier;
 import io.github.rates.suppliers.RatesConvertingSupplier;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ class IntegrationTest {
         String asset = "ADA";
         String quotable = "BTC";
         BigDecimal amount = BigDecimal.valueOf(3.04);
-        Rate rate = new Rate(asset + quotable, BigDecimal.valueOf(4550.9311));
+        Rate rate = new Rate(asset, quotable, BigDecimal.valueOf(4550.9311));
         BigDecimal expected = amount.multiply(rate.getPrice());
 
         ExchangeRatesCache cache = new ExchangeRatesCache();
@@ -42,7 +43,7 @@ class IntegrationTest {
         CacheUpdateProgram cacheUpdateProgram = new CacheUpdateProgram(executorService, 0L, 1L, TimeUnit.MINUTES);
         CacheUpdater cacheUpdater = new CacheUpdater(cache, binanceTargetRatesSupplier, cacheUpdateProgram);
 
-        given(binanceTargetRatesSupplier.getRatesFromTarget()).willReturn(List.of(rate));
+        given(binanceTargetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
         cacheUpdater.startProgram();
 

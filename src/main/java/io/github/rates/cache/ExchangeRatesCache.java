@@ -2,7 +2,7 @@ package io.github.rates.cache;
 
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
-import io.github.rates.model.Rate;
+import io.github.rates.domain.Rate;
 
 import java.util.List;
 import java.util.NavigableMap;

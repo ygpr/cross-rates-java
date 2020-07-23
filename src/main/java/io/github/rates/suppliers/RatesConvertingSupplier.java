@@ -1,7 +1,7 @@
 package io.github.rates.suppliers;
 
 import io.github.rates.cache.ExchangeRatesCache;
-import io.github.rates.model.Rate;
+import io.github.rates.domain.Rate;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -20,17 +20,17 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
 
     @Override
     public Optional<BigDecimal> convert(BigDecimal amount, String asset, String quotable) {
-        return getRate(asset, quotable).map(convertToCurrentRate(amount));
+        return getRate(asset, quotable).map(convertToReceivedRate(amount));
     }
 
     @Override
     public CompletableFuture<BigDecimal> convertAsynchronously(BigDecimal amount, String asset, String quotable) {
-        return getRateAsynchronously(asset, quotable).thenApply(convertToCurrentRate(amount));
+        return getRateAsynchronously(asset, quotable).thenApply(convertToReceivedRate(amount));
     }
 
     @Override
     public CompletableFuture<BigDecimal> convertAsynchronously(BigDecimal amount, String asset, String quotable, long delayInSeconds) {
-        return getRateAsynchronously(asset, quotable, delayInSeconds).thenApply(convertToCurrentRate(amount));
+        return getRateAsynchronously(asset, quotable, delayInSeconds).thenApply(convertToReceivedRate(amount));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
         );
     }
 
-    private Function<Rate, BigDecimal> convertToCurrentRate(BigDecimal amount) {
+    private Function<Rate, BigDecimal> convertToReceivedRate(BigDecimal amount) {
         return rate -> rate == null ? null : rate.getPrice().multiply(amount);
     }
 
@@ -60,6 +60,6 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
     }
 
     private Executor delayedExecutor(long delayInSeconds, TimeUnit unit, Executor executor) {
-        return r -> executorService.schedule(() -> executor.execute(r), delayInSeconds, unit);
+        return runnable -> executorService.schedule(() -> executor.execute(runnable), delayInSeconds, unit);
     }
 }

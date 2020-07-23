@@ -29,6 +29,6 @@ public class CacheUpdater {
     }
 
     private Runnable getRatesAndCallUpdate() {
-        return () -> exchangeRatesCache.updateCryptoCurrenciesRates(targetRatesSupplier.getRatesFromTarget());
+        return () -> targetRatesSupplier.getRatesFromTarget().thenAccept(exchangeRatesCache::updateCryptoCurrenciesRates);
     }
 }

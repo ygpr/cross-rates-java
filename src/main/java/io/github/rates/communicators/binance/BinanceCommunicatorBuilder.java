@@ -6,11 +6,17 @@ import io.github.rates.tools.json.UncheckedObjectMapper;
 public class BinanceCommunicatorBuilder {
 
     public static BinanceRatesProvidingCommunicator newBinanceRatesProvidingCommunicator() {
-        return new BinanceRatesProvidingCommunicator(createBinanceAPI(), new BinanceResponsesToModelMapper());
+        return new BinanceRatesProvidingCommunicator(
+                createBinanceAPI(),
+                new BinanceResponsesToModelMapper()
+        );
     }
 
-    private static BinanceApi createBinanceAPI() {
-        return new BinanceApi(CommunicatorsAPIConfigurations.createBinanceHttpClient(), new UncheckedObjectMapper());
+    private static BinanceRestApi createBinanceAPI() {
+        return new BinanceRestApi(
+                CommunicatorsAPIConfigurations.createBinanceHttpClient(),
+                new UncheckedObjectMapper()
+        );
     }
 
 }

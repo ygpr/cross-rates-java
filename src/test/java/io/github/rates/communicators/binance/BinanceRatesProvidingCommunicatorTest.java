@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import io.github.rates.communicators.binance.model.response.ExchangeInfoResponse;
-import io.github.rates.communicators.binance.model.response.RateResponse;
+import io.github.rates.communicators.binance.model.response.BinanceRateResponse;
 import io.github.rates.communicators.binance.model.response.SymbolResponse;
 import io.github.rates.domain.Rate;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,13 @@ import java.util.concurrent.CompletableFuture;
 class BinanceRatesProvidingCommunicatorTest {
 
     @Mock
-    private BinanceApi binanceApi;
+    private BinanceRestApi binanceApi;
 
     @Mock
     private BinanceResponsesToModelMapper binanceResponsesToModelMapper;
 
     @InjectMocks
-    private BinanceRatesProvidingCommunicator binanceRatesJsonSupplier;
+    private BinanceRatesProvidingCommunicator ratesProvidingCommunicator;
 
     @Test
     void getRates() throws Exception {
@@ -38,14 +38,14 @@ class BinanceRatesProvidingCommunicatorTest {
         BigDecimal price = BigDecimal.valueOf(45.992111);
 
         SymbolResponse symbolResponse = new SymbolResponse(asset + quotable, asset, quotable);
-        RateResponse rateResponse = new RateResponse(asset + quotable, price);
+        BinanceRateResponse rateResponse = new BinanceRateResponse(asset + quotable, price);
         Rate rate = new Rate(asset, quotable, price);
 
         given(binanceApi.sendRequestForRates()).willReturn(CompletableFuture.completedFuture(List.of(rateResponse)));
         given(binanceApi.sendRequestForExchangeInfo()).willReturn(CompletableFuture.completedFuture(new ExchangeInfoResponse(List.of(symbolResponse))));
         given(binanceResponsesToModelMapper.mapToRate(List.of(rateResponse), List.of(symbolResponse))).willReturn(List.of(rate));
 
-        assertEquals(List.of(rate), binanceRatesJsonSupplier.getRates().get());
+        assertEquals(List.of(rate), ratesProvidingCommunicator.getRates().get());
     }
 
     @Test
@@ -54,6 +54,6 @@ class BinanceRatesProvidingCommunicatorTest {
             throw new IOException();
         });
 
-        assertThrows(RuntimeException.class, () -> binanceRatesJsonSupplier.getRates());
+        assertThrows(RuntimeException.class, () -> ratesProvidingCommunicator.getRates());
     }
 }

@@ -2,7 +2,7 @@ package io.github.rates.communicators.binance;
 
 import io.github.rates.communicators.RatesProvidingCommunicator;
 import io.github.rates.communicators.binance.model.response.ExchangeInfoResponse;
-import io.github.rates.communicators.binance.model.response.RateResponse;
+import io.github.rates.communicators.binance.model.response.BinanceRateResponse;
 import io.github.rates.domain.Rate;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.function.BiFunction;
 
 class BinanceRatesProvidingCommunicator implements RatesProvidingCommunicator {
 
-    private final BinanceApi binanceApi;
+    private final BinanceRestApi binanceApi;
     private final BinanceResponsesToModelMapper modelMapper;
 
-    BinanceRatesProvidingCommunicator(BinanceApi binanceApi, BinanceResponsesToModelMapper modelMapper) {
+    BinanceRatesProvidingCommunicator(BinanceRestApi binanceApi, BinanceResponsesToModelMapper modelMapper) {
         this.binanceApi = binanceApi;
         this.modelMapper = modelMapper;
     }
@@ -30,7 +30,7 @@ class BinanceRatesProvidingCommunicator implements RatesProvidingCommunicator {
         }
     }
 
-    private BiFunction<List<RateResponse>, ExchangeInfoResponse, List<Rate>> mapResponsesToRate() {
+    private BiFunction<List<BinanceRateResponse>, ExchangeInfoResponse, List<Rate>> mapResponsesToRate() {
         return (rateResponses, exchangeInfoResponse) -> modelMapper.mapToRate(rateResponses, exchangeInfoResponse.getSymbols());
     }
 

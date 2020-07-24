@@ -3,7 +3,7 @@ package io.github.rates.tools.json;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.rates.communicators.binance.model.response.RateResponse;
+import io.github.rates.communicators.binance.model.response.BinanceRateResponse;
 import io.github.rates.communicators.binance.model.response.SymbolResponse;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class UncheckedObjectMapperTest {
 
         String json = "[{\"symbol\":\"" + symbol + "\",\"price\":\"" + price + "\"}]";
 
-        List<RateResponse> rateResponses = uncheckedObjectMapper.readValueAsList(json, RateResponse.class);
+        List<BinanceRateResponse> rateResponses = uncheckedObjectMapper.readValueAsList(json, BinanceRateResponse.class);
 
         assertNotNull(rateResponses);
         assertFalse(rateResponses.isEmpty());
@@ -58,7 +58,7 @@ class UncheckedObjectMapperTest {
     void readValueAsList_readException_shouldThrowRuntimeException() {
         String json = "{\"symbol\":\"IDDQD\",\"price\":\"244\"}";
 
-        assertThrows(RuntimeException.class, () -> uncheckedObjectMapper.readValueAsList(json, RateResponse.class));
+        assertThrows(RuntimeException.class, () -> uncheckedObjectMapper.readValueAsList(json, BinanceRateResponse.class));
     }
 
 }

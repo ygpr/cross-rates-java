@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RateResponse implements PairNameIdentifier {
+public class BinanceRateResponse implements PairNameIdentifier {
 
     private final String symbol;
     private final BigDecimal price;
 
     @JsonCreator
-    public RateResponse(
+    public BinanceRateResponse(
             @JsonProperty("symbol") String symbol,
             @JsonProperty("price") BigDecimal price
     ) {
@@ -40,7 +40,7 @@ public class RateResponse implements PairNameIdentifier {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RateResponse that = (RateResponse) o;
+        BinanceRateResponse that = (BinanceRateResponse) o;
         return Objects.equals(symbol, that.symbol) && Objects.equals(price, that.price);
     }
 

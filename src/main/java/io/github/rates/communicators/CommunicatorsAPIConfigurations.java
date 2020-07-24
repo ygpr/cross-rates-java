@@ -12,4 +12,12 @@ public class CommunicatorsAPIConfigurations {
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();
     }
+
+    public static HttpClient createMonobankHttpClient() {
+        return HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_2)
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .connectTimeout(Duration.ofSeconds(20))
+                .build();
+    }
 }

@@ -25,4 +25,12 @@ public class ISO4217CodeToCurrency {
         return Optional.ofNullable(iso4217CodesToCurrencies.get(code));
     }
 
+    public boolean isFiat(String currency) {
+        try {
+            return Currency.getInstance(currency.toUpperCase()) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 package io.github.rates.communicators.binance;
 
-public class BinanceEndpoints {
+class BinanceEndpoints {
 
     private static final String API_ROOT = "https://api.binance.com/api";
     private static final String API_VERSION = "/v3";

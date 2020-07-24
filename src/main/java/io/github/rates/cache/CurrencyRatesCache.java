@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public class ExchangeRatesCache {
+public class CurrencyRatesCache {
 
     private final NavigableMap<String, Rate> cryptoCurrenciesRates = new ConcurrentSkipListMap<>(CASE_INSENSITIVE_ORDER);
 

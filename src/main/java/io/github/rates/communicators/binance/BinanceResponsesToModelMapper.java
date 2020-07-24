@@ -33,6 +33,9 @@ class BinanceResponsesToModelMapper {
                 : new Rate(
                 symbolResponse.getBaseAsset(),
                 symbolResponse.getQuoteAsset(),
+                symbolResponse.getPairName(),
+                symbolResponse.getBaseAssetPrecision(),
+                symbolResponse.getQuotePrecision(),
                 binanceRateResponse.getPrice());
     }
 

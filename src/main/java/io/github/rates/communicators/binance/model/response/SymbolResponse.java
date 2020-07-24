@@ -13,16 +13,22 @@ public class SymbolResponse implements PairNameIdentifier {
     private final String symbol;
     private final String baseAsset;
     private final String quoteAsset;
+    private final Integer baseAssetPrecision;
+    private final Integer quotePrecision;
 
     @JsonCreator
     public SymbolResponse(
             @JsonProperty("symbol") String symbol,
             @JsonProperty("baseAsset") String baseAsset,
-            @JsonProperty("quoteAsset") String quoteAsset
+            @JsonProperty("quoteAsset") String quoteAsset,
+            @JsonProperty("baseAssetPrecision") Integer baseAssetPrecision,
+            @JsonProperty("quotePrecision") Integer quotePrecision
     ) {
         this.symbol = symbol;
         this.baseAsset = baseAsset;
         this.quoteAsset = quoteAsset;
+        this.baseAssetPrecision = baseAssetPrecision;
+        this.quotePrecision = quotePrecision;
     }
 
     public String getSymbol() {
@@ -35,6 +41,14 @@ public class SymbolResponse implements PairNameIdentifier {
 
     public String getQuoteAsset() {
         return quoteAsset;
+    }
+
+    public Integer getBaseAssetPrecision() {
+        return baseAssetPrecision;
+    }
+
+    public Integer getQuotePrecision() {
+        return quotePrecision;
     }
 
     @Override
@@ -59,10 +73,12 @@ public class SymbolResponse implements PairNameIdentifier {
 
     @Override
     public String toString() {
-        return "TradedPairSymbolsResponse{" +
+        return "SymbolResponse{" +
                 "symbol='" + symbol + '\'' +
                 ", baseAsset='" + baseAsset + '\'' +
                 ", quoteAsset='" + quoteAsset + '\'' +
+                ", baseAssetPrecision=" + baseAssetPrecision +
+                ", quotePrecision=" + quotePrecision +
                 '}';
     }
 }

@@ -1,6 +1,6 @@
 package io.github.rates.communicators.monobank;
 
-import io.github.rates.communicators.AbstractRestRestApi;
+import io.github.rates.communicators.RestApi;
 import io.github.rates.communicators.monobank.model.MonobankRateResponse;
 import io.github.rates.tools.json.UncheckedObjectMapper;
 
@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-class MonobankRestApi extends AbstractRestRestApi {
+class MonobankRestApi extends RestApi {
 
     MonobankRestApi(HttpClient httpClient, UncheckedObjectMapper objectMapper) {
         super(httpClient, objectMapper);

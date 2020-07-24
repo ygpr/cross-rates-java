@@ -19,18 +19,20 @@ class BinanceResponsesToModelMapperTest {
     void mapToRate() {
         String asset = "ADA";
         String quotable = "ZEC";
+        String pairName = asset + quotable;
+        Integer precision = 8;
         BigDecimal price = BigDecimal.valueOf(234.010563);
 
-        SymbolResponse symbolResponse = new SymbolResponse(asset + quotable, asset, quotable);
+        SymbolResponse symbolResponse = new SymbolResponse(pairName, asset, quotable, precision, precision);
         BinanceRateResponse rateResponse = new BinanceRateResponse(asset + quotable, price);
-        Rate expectedRate = new Rate(asset, quotable, price);
+        Rate expectedRate = new Rate(asset, quotable, pairName, precision, precision, price);
 
         assertEquals(List.of(expectedRate), modelMapper.mapToRate(List.of(rateResponse), List.of(symbolResponse)));
     }
 
     @Test
     void mapToRate_symbolOfRateNotFound_shouldSkip() {
-        SymbolResponse symbolResponse = new SymbolResponse("TEST", "TE", "ST");
+        SymbolResponse symbolResponse = new SymbolResponse("TEST", "TE", "ST", 7, 2);
         BinanceRateResponse rateResponse = new BinanceRateResponse("BTCETH", BigDecimal.ONE);
 
         assertTrue(modelMapper.mapToRate(List.of(rateResponse), List.of(symbolResponse)).isEmpty());

@@ -1,7 +1,7 @@
 package io.github.rates.communicators.monobank;
 
 import io.github.rates.communicators.CommunicatorsAPIConfigurations;
-import io.github.rates.tools.currency.ISO4217CodeToCurrencyTicker;
+import io.github.rates.tools.currency.ISO4217CodeToCurrency;
 import io.github.rates.tools.json.UncheckedObjectMapper;
 
 public class MonobankCommunicatorBuilder {
@@ -12,7 +12,7 @@ public class MonobankCommunicatorBuilder {
 
     private static MonobankResponseToModelMapper createModelMapper() {
         return new MonobankResponseToModelMapper(
-                new ISO4217CodeToCurrencyTicker(),
+                new ISO4217CodeToCurrency(),
                 new MonobankRatePriceFromResponseCalculator()
         );
     }

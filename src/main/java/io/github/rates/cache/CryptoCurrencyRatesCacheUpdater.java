@@ -3,18 +3,18 @@ package io.github.rates.cache;
 import io.github.rates.configurations.CacheUpdateProgram;
 import io.github.rates.suppliers.TargetRatesSupplier;
 
-public class CacheUpdater {
+public class CryptoCurrencyRatesCacheUpdater {
 
-    private final ExchangeRatesCache exchangeRatesCache;
+    private final CurrencyRatesCache currencyRatesCache;
     private final TargetRatesSupplier targetRatesSupplier;
     private final CacheUpdateProgram cacheUpdateProgram;
 
-    public CacheUpdater(
-            ExchangeRatesCache exchangeRatesCache,
+    public CryptoCurrencyRatesCacheUpdater(
+            CurrencyRatesCache currencyRatesCache,
             TargetRatesSupplier targetRatesSupplier,
             CacheUpdateProgram cacheUpdateProgram
     ) {
-        this.exchangeRatesCache = exchangeRatesCache;
+        this.currencyRatesCache = currencyRatesCache;
         this.targetRatesSupplier = targetRatesSupplier;
         this.cacheUpdateProgram = cacheUpdateProgram;
     }
@@ -29,6 +29,6 @@ public class CacheUpdater {
     }
 
     private Runnable getRatesAndCallUpdate() {
-        return () -> targetRatesSupplier.getRatesFromTarget().thenAccept(exchangeRatesCache::updateCryptoCurrenciesRates);
+        return () -> targetRatesSupplier.getRatesFromTarget().thenAccept(currencyRatesCache::updateCryptoCurrenciesRates);
     }
 }

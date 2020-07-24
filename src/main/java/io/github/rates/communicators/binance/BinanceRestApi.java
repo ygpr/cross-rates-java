@@ -1,6 +1,6 @@
 package io.github.rates.communicators.binance;
 
-import io.github.rates.communicators.AbstractRestRestApi;
+import io.github.rates.communicators.RestApi;
 import io.github.rates.communicators.binance.model.response.BinanceRateResponse;
 import io.github.rates.communicators.binance.model.response.ExchangeInfoResponse;
 import io.github.rates.tools.json.UncheckedObjectMapper;
@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-class BinanceRestApi extends AbstractRestRestApi {
+class BinanceRestApi extends RestApi {
 
     BinanceRestApi(HttpClient httpClient, UncheckedObjectMapper objectMapper) {
         super(httpClient, objectMapper);

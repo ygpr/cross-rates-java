@@ -3,7 +3,7 @@ package io.github.rates.suppliers;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.rates.cache.ExchangeRatesCache;
+import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.domain.Rate;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,8 @@ class RatesConvertingSupplierTest {
 
     private final String asset = "BTC";
     private final String quotable = "ETH";
-    private final Rate rate = new Rate(asset, quotable, BigDecimal.ONE);
-    private final ExchangeRatesCache cache = new ExchangeRatesCache();
+    private final Rate rate = new Rate(asset, quotable, asset + quotable, 1, 1, BigDecimal.ONE);
+    private final CurrencyRatesCache cache = new CurrencyRatesCache();
     private final RatesConvertingSupplier ratesConvertingSupplier = new RatesConvertingSupplier(cache, Executors.newSingleThreadScheduledExecutor());
 
     @BeforeEach

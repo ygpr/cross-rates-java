@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @ExtendWith(MockitoExtension.class)
-class CacheUpdaterTest {
+class CurrencyRatesCacheUpdaterTest {
 
     @Mock
     private TargetRatesSupplier targetRatesSupplier;
@@ -29,10 +29,10 @@ class CacheUpdaterTest {
 
     @Test
     void startProgram() {
-        ExchangeRatesCache cache = new ExchangeRatesCache();
-        CacheUpdater cacheUpdater = new CacheUpdater(cache, targetRatesSupplier, cacheUpdateProgram);
+        CurrencyRatesCache cache = new CurrencyRatesCache();
+        CryptoCurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CryptoCurrencyRatesCacheUpdater(cache, targetRatesSupplier, cacheUpdateProgram);
 
-        Rate rate = new Rate("TEST", "NAME", BigDecimal.TEN);
+        Rate rate = new Rate("TEST", "NAME", "TESTNAME", 8, 8, BigDecimal.TEN);
 
         given(cacheUpdateProgram.getExecutorService()).willReturn(Executors.newSingleThreadScheduledExecutor());
         given(cacheUpdateProgram.getDelay()).willReturn(Long.valueOf(1));
@@ -40,7 +40,7 @@ class CacheUpdaterTest {
         given(cacheUpdateProgram.getTimeUnit()).willReturn(TimeUnit.SECONDS);
         given(targetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
-        cacheUpdater.startProgram();
+        cryptoCurrencyRatesCacheUpdater.startProgram();
         await().until(() -> cache.getCryptoCurrencyRate(rate.getPairName()) != null);
 
         assertEquals(rate, cache.getCryptoCurrencyRate(rate.getPairName()));

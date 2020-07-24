@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-import io.github.rates.cache.CacheUpdater;
-import io.github.rates.cache.ExchangeRatesCache;
+import io.github.rates.cache.CryptoCurrencyRatesCacheUpdater;
+import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.configurations.CacheUpdateProgram;
 import io.github.rates.domain.Rate;
 import io.github.rates.suppliers.BinanceTargetRatesSupplier;
@@ -34,18 +34,18 @@ class IntegrationTest {
         String asset = "ADA";
         String quotable = "BTC";
         BigDecimal amount = BigDecimal.valueOf(3.04);
-        Rate rate = new Rate(asset, quotable, BigDecimal.valueOf(4550.9311));
+        Rate rate = new Rate(asset, quotable, asset + quotable, 8, 8, BigDecimal.valueOf(4550.9311));
         BigDecimal expected = amount.multiply(rate.getPrice());
 
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        CurrencyRatesCache cache = new CurrencyRatesCache();
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         RatesConvertingSupplier ratesConvertingSupplier = new RatesConvertingSupplier(cache, executorService);
         CacheUpdateProgram cacheUpdateProgram = new CacheUpdateProgram(executorService, 0L, 1L, TimeUnit.MINUTES);
-        CacheUpdater cacheUpdater = new CacheUpdater(cache, binanceTargetRatesSupplier, cacheUpdateProgram);
+        CryptoCurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CryptoCurrencyRatesCacheUpdater(cache, binanceTargetRatesSupplier, cacheUpdateProgram);
 
         given(binanceTargetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
-        cacheUpdater.startProgram();
+        cryptoCurrencyRatesCacheUpdater.startProgram();
 
         assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable, 2).get());
         assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable).get());

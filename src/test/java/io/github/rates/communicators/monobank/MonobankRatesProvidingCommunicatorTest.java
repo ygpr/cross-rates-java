@@ -34,7 +34,7 @@ class MonobankRatesProvidingCommunicatorTest {
         String asset = "EUR";
         String quotable = "USD";
         BigDecimal price = BigDecimal.valueOf(45.992111);
-        Rate rate = new Rate(asset, quotable, price);
+        Rate rate = new Rate(asset, quotable, asset + quotable, 4, 4, price);
         MonobankRateResponse monobankRateResponse = new MonobankRateResponse(24234, 335435, price, price, price, System.currentTimeMillis());
 
         given(monobankApi.sendRequestForRates()).willReturn(CompletableFuture.completedFuture(List.of(monobankRateResponse)));

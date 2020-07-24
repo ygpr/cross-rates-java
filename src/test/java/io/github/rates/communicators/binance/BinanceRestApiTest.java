@@ -53,8 +53,8 @@ class BinanceRestApiTest {
 
     @Test
     void sendRequestForSymbols() throws Exception {
-        String json = "[{\"symbol\":\"btceth\",\"baseAsset\":\"btc\",\"quoteAsset\":\"eth\"}]";
-        SymbolResponse symbolResponse = new SymbolResponse("btceth", "btc", "eth");
+        String json = "[{\"symbol\":\"btceth\",\"baseAsset\":\"btc\",\"quoteAsset\":\"eth\",\"baseAssetPrecision\":\"8\",\"quotePrecision\":\"8\"}]";
+        SymbolResponse symbolResponse = new SymbolResponse("btceth", "btc", "eth", 8, 8);
         ExchangeInfoResponse exchangeInfoResponse = new ExchangeInfoResponse(List.of(symbolResponse));
 
         HttpResponse<Object> mockedHttpResponse = Mockito.mock(HttpResponse.class);

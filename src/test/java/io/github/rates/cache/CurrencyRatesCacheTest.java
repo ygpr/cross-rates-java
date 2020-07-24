@@ -11,12 +11,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.List;
 
-class ExchangeRatesCacheTest {
+class CurrencyRatesCacheTest {
 
     @Test
     void updateCryptoCurrenciesRates() {
-        Rate rate = new Rate("test", "test", BigDecimal.TEN);
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        Rate rate = new Rate("test", "test", "test", 4, 5, BigDecimal.TEN);
+        CurrencyRatesCache cache = new CurrencyRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));
 
@@ -25,9 +25,9 @@ class ExchangeRatesCacheTest {
 
     @Test
     void updateCryptoCurrenciesRates_updateExisted() {
-        Rate oldRate = new Rate("test", "test", BigDecimal.ZERO);
-        Rate newRate = new Rate("test", "test", BigDecimal.ONE);
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        Rate oldRate = new Rate("test", "test", "test", 5, 5, BigDecimal.ZERO);
+        Rate newRate = new Rate("test", "test", "test", 1, 1, BigDecimal.ONE);
+        CurrencyRatesCache cache = new CurrencyRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(oldRate));
         cache.updateCryptoCurrenciesRates(List.of(newRate));
@@ -38,8 +38,8 @@ class ExchangeRatesCacheTest {
     @ParameterizedTest
     @ValueSource(strings = {"BTCETH", "BTCeth", "btcETH", "btceth"})
     void getCryptoCurrencyRate(String pairName) {
-        Rate rate = new Rate("btc", "eth", BigDecimal.valueOf(23942.234));
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        Rate rate = new Rate("btc", "eth", "btceth", 5, 6, BigDecimal.valueOf(23942.234));
+        CurrencyRatesCache cache = new CurrencyRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));
 
@@ -49,15 +49,15 @@ class ExchangeRatesCacheTest {
 
     @Test
     void getCryptoCurrencyRate_notFound() {
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        CurrencyRatesCache cache = new CurrencyRatesCache();
 
         assertNull(cache.getCryptoCurrencyRate("test"));
     }
 
     @Test
     void clear() {
-        Rate rate = new Rate("test", "test", BigDecimal.TEN);
-        ExchangeRatesCache cache = new ExchangeRatesCache();
+        Rate rate = new Rate("test", "test", "test", 7, 7, BigDecimal.TEN);
+        CurrencyRatesCache cache = new CurrencyRatesCache();
 
         cache.updateCryptoCurrenciesRates(List.of(rate));
 

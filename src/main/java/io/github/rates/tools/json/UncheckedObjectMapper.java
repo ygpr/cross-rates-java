@@ -12,7 +12,7 @@ public class UncheckedObjectMapper extends ObjectMapper {
         try {
             return this.readValue(json, this.getTypeFactory().constructCollectionType(List.class, responseClass));
         } catch (IOException e) {
-            throw new CompletionException(String.format("Exception occurred during parsing json to List of %s class", responseClass), e);
+            throw new CompletionException(String.format("Exception occurred during parsing json to List of %s", responseClass), e);
         }
     }
 
@@ -20,7 +20,7 @@ public class UncheckedObjectMapper extends ObjectMapper {
         try {
             return this.readValue(json, this.getTypeFactory().constructType(responseClass));
         } catch (IOException e) {
-            throw new CompletionException(String.format("Exception occurred during parsing json to %s class", responseClass), e);
+            throw new CompletionException(String.format("Exception occurred during parsing json to %s", responseClass), e);
         }
     }
 

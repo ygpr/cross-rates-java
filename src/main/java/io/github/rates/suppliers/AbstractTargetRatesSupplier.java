@@ -1,6 +1,6 @@
 package io.github.rates.suppliers;
 
-import io.github.rates.communicators.RatesSupplierCommunicator;
+import io.github.rates.communicators.RatesProvidingCommunicator;
 import io.github.rates.domain.Rate;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.concurrent.CompletableFuture;
 
 public class AbstractTargetRatesSupplier implements TargetRatesSupplier {
 
-    private final RatesSupplierCommunicator ratesSupplierCommunicator;
+    private final RatesProvidingCommunicator ratesProvidingCommunicator;
 
-    public AbstractTargetRatesSupplier(RatesSupplierCommunicator ratesSupplierCommunicator) {
-        this.ratesSupplierCommunicator = ratesSupplierCommunicator;
+    public AbstractTargetRatesSupplier(RatesProvidingCommunicator ratesProvidingCommunicator) {
+        this.ratesProvidingCommunicator = ratesProvidingCommunicator;
 
     }
 
     @Override
     public CompletableFuture<List<Rate>> getRatesFromTarget() {
-        return ratesSupplierCommunicator.getRates();
+        return ratesProvidingCommunicator.getRates();
     }
 }

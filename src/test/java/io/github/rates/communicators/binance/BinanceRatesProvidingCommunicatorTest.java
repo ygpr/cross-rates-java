@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @ExtendWith(MockitoExtension.class)
-class BinanceRatesSupplierCommunicatorTest {
+class BinanceRatesProvidingCommunicatorTest {
 
     @Mock
     private BinanceApi binanceApi;
@@ -29,7 +29,7 @@ class BinanceRatesSupplierCommunicatorTest {
     private BinanceResponsesToModelMapper binanceResponsesToModelMapper;
 
     @InjectMocks
-    private BinanceRatesSupplierCommunicator binanceRatesJsonSupplier;
+    private BinanceRatesProvidingCommunicator binanceRatesJsonSupplier;
 
     @Test
     void getRates() throws Exception {

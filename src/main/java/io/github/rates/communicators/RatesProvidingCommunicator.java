@@ -5,7 +5,7 @@ import io.github.rates.domain.Rate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public interface RatesSupplierCommunicator {
+public interface RatesProvidingCommunicator {
 
     CompletableFuture<List<Rate>> getRates();
 

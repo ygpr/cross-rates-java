@@ -5,8 +5,8 @@ import io.github.rates.tools.json.UncheckedObjectMapper;
 
 public class BinanceCommunicatorBuilder {
 
-    public static BinanceRatesSupplierCommunicator newBinanceRatesSupplierCommunicator() {
-        return new BinanceRatesSupplierCommunicator(createBinanceAPI(), new BinanceResponsesToModelMapper());
+    public static BinanceRatesProvidingCommunicator newBinanceRatesProvidingCommunicator() {
+        return new BinanceRatesProvidingCommunicator(createBinanceAPI(), new BinanceResponsesToModelMapper());
     }
 
     private static BinanceApi createBinanceAPI() {

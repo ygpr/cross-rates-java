@@ -10,7 +10,8 @@ public interface RateConverter {
 
     CompletableFuture<BigDecimal> convertAsynchronously(BigDecimal amount, String asset, String quotable);
 
-    CompletableFuture<BigDecimal> convertAsynchronously(BigDecimal amount, String asset, String quotable, long delayInSeconds);
-
+    CompletableFuture<BigDecimal> convertAsynchronously(
+            BigDecimal amount, String asset, String quotable, long delayInSeconds
+    );
 
 }

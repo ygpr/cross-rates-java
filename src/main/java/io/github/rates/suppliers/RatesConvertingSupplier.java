@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.function.Function;
 
-public class RatesConvertingSupplier implements RateSupplier, RateConverter {
+public class RatesConvertingSupplier implements RateConverterSupplier {
 
     private final CurrencyRatesCache currencyRatesCache;
     private final ScheduledExecutorService executorService;

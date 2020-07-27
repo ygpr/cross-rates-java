@@ -145,11 +145,46 @@
         </plugins>
     </build>
 
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Serhii Maksymchuk</name>
+            <email>serg.maximchuk@gmail.com</email>
+            <organization>cross-rates</organization>
+            <organizationUrl>https://github.com/cross-rates</organizationUrl>
+        </developer>
+        <developer>
+            <name>Igor Pryadko</name>
+            <email>test@test.com</email>
+            <organization>cross-rates</organization>
+            <organizationUrl>https://github.com/cross-rates</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/cross-rates/cross-rates-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Serg-Maximchuk/cross-rates/cross-rates-java.git</developerConnection>
+        <url>http://github.com/cross-rates/cross-rates-java/tree/master</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <distributionManagement>
         <!-- Central Repository -->
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
+
 </project>

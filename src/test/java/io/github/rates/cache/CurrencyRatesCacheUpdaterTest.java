@@ -30,10 +30,12 @@ class CurrencyRatesCacheUpdaterTest {
     @Test
     void startProgram() {
         CurrencyRatesCache cache = new CurrencyRatesCache();
-        CryptoCurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CryptoCurrencyRatesCacheUpdater(cache, targetRatesSupplier, cacheUpdateProgram);
-
-        Rate rate = new Rate("TEST", "NAME", "TESTNAME", 8, 8, BigDecimal.TEN);
-
+        CurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CurrencyRatesCacheUpdater(
+                cache, targetRatesSupplier, cacheUpdateProgram
+        );
+        Rate rate = new Rate(
+                "TEST", "NAME", "TESTNAME", 8, 8, BigDecimal.TEN
+        );
         given(cacheUpdateProgram.getExecutorService()).willReturn(Executors.newSingleThreadScheduledExecutor());
         given(cacheUpdateProgram.getDelay()).willReturn(Long.valueOf(1));
         given(cacheUpdateProgram.getInitialDelay()).willReturn(Long.valueOf(1));

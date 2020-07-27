@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-import io.github.rates.cache.CryptoCurrencyRatesCacheUpdater;
+import io.github.rates.cache.CurrencyRatesCacheUpdater;
 import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.configurations.CacheUpdateProgram;
 import io.github.rates.domain.Rate;
@@ -34,15 +34,20 @@ class IntegrationTest {
         String asset = "ADA";
         String quotable = "BTC";
         BigDecimal amount = BigDecimal.valueOf(3.04);
-        Rate rate = new Rate(asset, quotable, asset + quotable, 8, 8, BigDecimal.valueOf(4550.9311));
+        Rate rate = new Rate(
+                asset, quotable, asset + quotable, 8, 8, BigDecimal.valueOf(4550.9311)
+        );
         BigDecimal expected = amount.multiply(rate.getPrice());
 
         CurrencyRatesCache cache = new CurrencyRatesCache();
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         RatesConvertingSupplier ratesConvertingSupplier = new RatesConvertingSupplier(cache, executorService);
-        CacheUpdateProgram cacheUpdateProgram = new CacheUpdateProgram(executorService, 0L, 1L, TimeUnit.MINUTES);
-        CryptoCurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CryptoCurrencyRatesCacheUpdater(cache, binanceTargetRatesSupplier, cacheUpdateProgram);
-
+        CacheUpdateProgram cacheUpdateProgram = new CacheUpdateProgram(
+                executorService, 0L, 1L, TimeUnit.MINUTES
+        );
+        CurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CurrencyRatesCacheUpdater(
+                cache, binanceTargetRatesSupplier, cacheUpdateProgram
+        );
         given(binanceTargetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
         cryptoCurrencyRatesCacheUpdater.startProgram();

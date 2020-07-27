@@ -12,7 +12,10 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 class RatesConvertingSupplierTest {
 
@@ -20,7 +23,9 @@ class RatesConvertingSupplierTest {
     private final String quotable = "ETH";
     private final Rate rate = new Rate(asset, quotable, asset + quotable, 1, 1, BigDecimal.ONE);
     private final CurrencyRatesCache cache = new CurrencyRatesCache();
-    private final RatesConvertingSupplier ratesConvertingSupplier = new RatesConvertingSupplier(cache, Executors.newSingleThreadScheduledExecutor());
+    private final RatesConvertingSupplier ratesConvertingSupplier = new RatesConvertingSupplier(
+            cache, Executors.newSingleThreadScheduledExecutor()
+    );
 
     @BeforeEach
     void setUp() {
@@ -46,19 +51,25 @@ class RatesConvertingSupplierTest {
     void convertAsynchronously() throws Exception {
         BigDecimal amount = BigDecimal.valueOf(1226.92);
         BigDecimal expected = amount.multiply(rate.getPrice());
-        assertThat(expected, Matchers.comparesEqualTo(ratesConvertingSupplier.convertAsynchronously(amount, asset, quotable).get()));
+        assertThat(expected, Matchers.comparesEqualTo(ratesConvertingSupplier.convertAsynchronously(amount, asset, quotable)
+                .get(5, TimeUnit.SECONDS)));
     }
 
     @Test
-    void convertAsynchronously_emptyResponse() throws Exception {
-        assertNull(ratesConvertingSupplier.convertAsynchronously(BigDecimal.ONE, "a", "b").get());
+    void convertAsynchronously_emptyResponse() {
+        assertThrows(
+                TimeoutException.class,
+                () -> ratesConvertingSupplier.convertAsynchronously(BigDecimal.ONE, "a", "b")
+                        .get(5, TimeUnit.SECONDS)
+        );
     }
 
     @Test
     void convertAsynchronouslyDelayed() throws Exception {
         BigDecimal amount = BigDecimal.valueOf(4);
         BigDecimal expected = amount.multiply(rate.getPrice());
-        assertThat(expected, Matchers.comparesEqualTo(ratesConvertingSupplier.convertAsynchronously(amount, asset, quotable, 1).get()));
+        assertThat(expected, Matchers.comparesEqualTo(ratesConvertingSupplier.convertAsynchronously(
+                amount, asset, quotable, 1).get(5, TimeUnit.SECONDS)));
     }
 
     @Test
@@ -80,22 +91,32 @@ class RatesConvertingSupplierTest {
 
     @Test
     void getRateAsynchronously() throws Exception {
-        assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable).get());
+        CountDownLatch count = new CountDownLatch(1);
+        ratesConvertingSupplier.getRateAsynchronously(asset, quotable).thenRunAsync(count::countDown);
+        count.await(5, TimeUnit.SECONDS);
+        assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable)
+                .get(5, TimeUnit.SECONDS));
     }
 
     @Test
-    void getRateAsynchronously_emptyResponse() throws Exception {
-        assertNull(ratesConvertingSupplier.getRateAsynchronously("a", "b").get());
+    void getRateAsynchronously_incompleteFutureExpected() {
+        assertThrows(
+                TimeoutException.class,
+                () -> ratesConvertingSupplier.getRateAsynchronously("a", "b")
+                        .get(5, TimeUnit.SECONDS)
+        );
     }
 
     @Test
     void getRateAsynchronouslyDelayed() throws Exception {
-        assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable, 1).get());
+        assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable, 1)
+                .get(5, TimeUnit.SECONDS));
     }
 
     @Test
     void getRateAsynchronouslyDelayed_emptyResponse() throws Exception {
-        assertNull(ratesConvertingSupplier.getRateAsynchronously("a", "b", 1).get());
+        assertNull(ratesConvertingSupplier.getRateAsynchronously("a", "b", 1)
+                .get(5, TimeUnit.SECONDS));
     }
 
 }

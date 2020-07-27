@@ -29,7 +29,9 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
     }
 
     @Override
-    public CompletableFuture<BigDecimal> convertAsynchronously(BigDecimal amount, String asset, String quotable, long delayInSeconds) {
+    public CompletableFuture<BigDecimal> convertAsynchronously(
+            BigDecimal amount, String asset, String quotable, long delayInSeconds
+    ) {
         return getRateAsynchronously(asset, quotable, delayInSeconds).thenApply(convertToReceivedRate(amount));
     }
 
@@ -40,7 +42,7 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
 
     @Override
     public CompletableFuture<Rate> getRateAsynchronously(String asset, String quotable) {
-        return CompletableFuture.supplyAsync(() -> currencyRatesCache.getCryptoCurrencyRate(asset + quotable));
+        return currencyRatesCache.getCryptoCurrencyRateAsync(asset + quotable);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class RatesConvertingSupplier implements RateSupplier, RateConverter {
     }
 
     private Function<Rate, BigDecimal> convertToReceivedRate(BigDecimal amount) {
-        return rate -> rate == null ? null : rate.getPrice().multiply(amount);
+        return rate -> (rate == null) ? null : rate.getPrice().multiply(amount);
     }
 
     private Executor delayedExecutor(long delayInSeconds, TimeUnit unit) {

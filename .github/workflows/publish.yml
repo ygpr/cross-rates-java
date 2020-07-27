@@ -1,9 +1,9 @@
-name: Release
+name: Release Stable
 
 on:
   push:
     branches:
-      - stage
+      - master
 
 jobs:
   release:

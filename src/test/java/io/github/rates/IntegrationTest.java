@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-import io.github.rates.cache.CryptoCurrencyRatesCacheUpdater;
+import io.github.rates.cache.CurrencyRatesCacheUpdater;
 import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.configurations.CacheUpdateProgram;
 import io.github.rates.domain.Rate;
@@ -45,7 +45,7 @@ class IntegrationTest {
         CacheUpdateProgram cacheUpdateProgram = new CacheUpdateProgram(
                 executorService, 0L, 1L, TimeUnit.MINUTES
         );
-        CryptoCurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CryptoCurrencyRatesCacheUpdater(
+        CurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CurrencyRatesCacheUpdater(
                 cache, binanceTargetRatesSupplier, cacheUpdateProgram
         );
         given(binanceTargetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));

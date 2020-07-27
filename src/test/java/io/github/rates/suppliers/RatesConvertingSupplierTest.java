@@ -74,7 +74,8 @@ class RatesConvertingSupplierTest {
 
     @Test
     void convertAsynchronouslyDelayed_emptyResponse() throws Exception {
-        assertNull(ratesConvertingSupplier.convertAsynchronously(BigDecimal.ONE, "a", "b", 1).get());
+        assertNull(ratesConvertingSupplier.convertAsynchronously(BigDecimal.ONE, "a", "b", 1)
+                .get());
     }
 
     @Test
@@ -91,8 +92,10 @@ class RatesConvertingSupplierTest {
 
     @Test
     void getRateAsynchronously() throws Exception {
+        cache.clear();
         CountDownLatch count = new CountDownLatch(1);
         ratesConvertingSupplier.getRateAsynchronously(asset, quotable).thenRunAsync(count::countDown);
+        new Thread(() -> cache.updateCryptoCurrenciesRates(List.of(rate))).start();
         count.await(5, TimeUnit.SECONDS);
         assertEquals(rate, ratesConvertingSupplier.getRateAsynchronously(asset, quotable)
                 .get(5, TimeUnit.SECONDS));

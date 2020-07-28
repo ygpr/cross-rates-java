@@ -1,6 +1,6 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.USD_TETHER_TICKER;
+import static io.github.rates.transform.strategies.TransformOperations.USD_TETHER_TICKER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;

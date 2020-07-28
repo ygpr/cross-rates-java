@@ -1,7 +1,7 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
 import io.github.rates.suppliers.RatesSupplier;
-import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.domain.TransformStrategyType;
 
 import java.util.Collections;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class TransformStrategyFactory {
         );
     }
 
-    Map<TransformStrategyType, TransformStrategy> getTransformStrategiesAsMap() {
+    public Map<TransformStrategyType, TransformStrategy> getTransformStrategiesAsMap() {
         return Collections.unmodifiableMap(Map.of(
                 TransformStrategyType.CRYPTO_TO_CRYPTO, getCryptoToCryptoTransformStrategy(),
                 TransformStrategyType.CRYPTO_TO_FIAT, getCryptoToFiatTransformStrategy(),

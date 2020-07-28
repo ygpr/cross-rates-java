@@ -1,6 +1,6 @@
-package io.github.rates.suppliers.transformers;
+package io.github.rates.transform;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.*;
+import static io.github.rates.domain.TransformStrategyType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
@@ -21,7 +21,10 @@ class TransformStrategyTypeQualifierTest {
 
     @BeforeEach
     void setUp() {
-        transformStrategyTypeQualifier = new TransformStrategyTypeQualifier(iso4217CodeToCurrency, TransformStrategyTypeQualifier.getResultToTypeMap());
+        transformStrategyTypeQualifier = new TransformStrategyTypeQualifier(
+                iso4217CodeToCurrency,
+                TransformStrategyTypeQualifier.getResultToTypeMap()
+        );
     }
 
     @Test

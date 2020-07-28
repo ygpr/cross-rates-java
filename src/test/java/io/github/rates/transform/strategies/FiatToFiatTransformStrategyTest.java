@@ -1,7 +1,7 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.FIAT_TO_FIAT;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.UKRAINIAN_HRYVNIA_TICKER;
+import static io.github.rates.domain.TransformStrategyType.FIAT_TO_FIAT;
+import static io.github.rates.transform.strategies.TransformOperations.UKRAINIAN_HRYVNIA_TICKER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;

@@ -1,8 +1,8 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.CRYPTO_TO_FIAT;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.BITCOIN_TICKER;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.EURO_TICKER;
+import static io.github.rates.domain.TransformStrategyType.CRYPTO_TO_FIAT;
+import static io.github.rates.transform.strategies.TransformOperations.BITCOIN_TICKER;
+import static io.github.rates.transform.strategies.TransformOperations.EURO_TICKER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;

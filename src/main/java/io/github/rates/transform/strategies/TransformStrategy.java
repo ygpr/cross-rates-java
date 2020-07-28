@@ -1,6 +1,6 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.domain.TransformStrategyType;
 
 import java.math.BigDecimal;
 import java.util.Optional;

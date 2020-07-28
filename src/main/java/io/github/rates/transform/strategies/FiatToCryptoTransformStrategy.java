@@ -1,10 +1,10 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.FIAT_TO_CRYPTO;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.BITCOIN_TICKER;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.EURO_TICKER;
+import static io.github.rates.domain.TransformStrategyType.FIAT_TO_CRYPTO;
+import static io.github.rates.transform.strategies.TransformOperations.BITCOIN_TICKER;
+import static io.github.rates.transform.strategies.TransformOperations.EURO_TICKER;
 
-import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.domain.TransformStrategyType;
 import io.github.rates.tools.math.CurrencyConvertingDecimal;
 
 import java.math.BigDecimal;

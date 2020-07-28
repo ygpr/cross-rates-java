@@ -1,4 +1,4 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
 import io.github.rates.domain.Rate;
 import io.github.rates.suppliers.RatesSupplier;

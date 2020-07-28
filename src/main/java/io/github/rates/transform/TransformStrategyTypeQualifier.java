@@ -1,8 +1,9 @@
-package io.github.rates.suppliers.transformers;
+package io.github.rates.transform;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.*;
+import static io.github.rates.domain.TransformStrategyType.*;
 
 import io.github.rates.domain.CurrencyComprassionResult;
+import io.github.rates.domain.TransformStrategyType;
 import io.github.rates.tools.currency.ISO4217CodeToCurrency;
 
 import java.util.Collections;

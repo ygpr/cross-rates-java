@@ -1,10 +1,10 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.FIAT_TO_FIAT;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.UKRAINIAN_HRYVNIA_TICKER;
+import static io.github.rates.domain.TransformStrategyType.FIAT_TO_FIAT;
+import static io.github.rates.transform.strategies.TransformOperations.UKRAINIAN_HRYVNIA_TICKER;
 
 import io.github.rates.domain.Rate;
-import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.domain.TransformStrategyType;
 import io.github.rates.tools.math.CurrencyConvertingDecimal;
 
 import java.math.BigDecimal;
@@ -44,7 +44,9 @@ class FiatToFiatTransformStrategy implements TransformStrategy {
     @Override
     public CompletableFuture<BigDecimal> transformAsynchronously(BigDecimal amount, String currencyFrom, String currencyTo) {
         return CompletableFuture.supplyAsync(() -> transform(amount, currencyFrom, currencyTo)
-                .orElseThrow(() -> new RuntimeException(String.format("Can't transform %s to %s, one of currencies not found", currencyFrom, currencyTo))));
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Can't transform %s to %s, one of currencies not found", currencyFrom, currencyTo)
+                )));
     }
 
     @Override

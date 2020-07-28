@@ -1,6 +1,6 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.*;
+import static io.github.rates.domain.TransformStrategyType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.rates.suppliers.RatesSupplier;

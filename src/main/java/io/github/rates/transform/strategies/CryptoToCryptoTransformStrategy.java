@@ -1,9 +1,9 @@
-package io.github.rates.suppliers.transformers.strategies;
+package io.github.rates.transform.strategies;
 
-import static io.github.rates.suppliers.transformers.TransformStrategyType.CRYPTO_TO_CRYPTO;
-import static io.github.rates.suppliers.transformers.strategies.TransformOperations.BITCOIN_TICKER;
+import static io.github.rates.domain.TransformStrategyType.CRYPTO_TO_CRYPTO;
+import static io.github.rates.transform.strategies.TransformOperations.BITCOIN_TICKER;
 
-import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.domain.TransformStrategyType;
 
 import java.math.BigDecimal;
 import java.util.Optional;

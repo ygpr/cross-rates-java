@@ -21,30 +21,26 @@ class TargetRatesProvidingCommunicatorTest {
     @Mock
     private RatesProvidingCommunicator ratesProvidingCommunicator;
 
-    private TargetRatesSupplier ratesSupplier;
+    private TargetRatesProvider ratesSupplier;
 
     @BeforeEach
     void setUp() {
-        ratesSupplier = new MockedRatesSupplier(ratesProvidingCommunicator);
+        ratesSupplier = new MockedRatesProvider(ratesProvidingCommunicator);
     }
 
     @Test
     void getRatesFromTarget() throws Exception {
         Rate rate = new Rate("DASH", "XRP", "DASHXRP", 4, 4, BigDecimal.ONE);
 
-
         given(ratesProvidingCommunicator.getRates()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
         assertEquals(List.of(rate), ratesSupplier.getRatesFromTarget().get());
     }
 
-    class MockedRatesSupplier extends TargetRatesSupplier {
+    class MockedRatesProvider extends TargetRatesProvider {
 
-        private final List<Rate> rates;
-
-        public MockedRatesSupplier(RatesProvidingCommunicator ratesProvidingCommunicator, Rate... rates) {
+        public MockedRatesProvider(RatesProvidingCommunicator ratesProvidingCommunicator) {
             super(ratesProvidingCommunicator);
-            this.rates = List.of(rates);
         }
 
     }

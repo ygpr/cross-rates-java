@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 
 import io.github.rates.configurations.CacheUpdateProgram;
 import io.github.rates.domain.Rate;
-import io.github.rates.suppliers.TargetRatesSupplier;
+import io.github.rates.suppliers.TargetRatesProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 class CurrencyRatesCacheUpdaterTest {
 
     @Mock
-    private TargetRatesSupplier targetRatesSupplier;
+    private TargetRatesProvider targetRatesProvider;
 
     @Mock
     private CacheUpdateProgram cacheUpdateProgram;
@@ -31,7 +31,7 @@ class CurrencyRatesCacheUpdaterTest {
     void startProgram() {
         CurrencyRatesCache cache = new CurrencyRatesCache();
         CurrencyRatesCacheUpdater cryptoCurrencyRatesCacheUpdater = new CurrencyRatesCacheUpdater(
-                cache, targetRatesSupplier, cacheUpdateProgram
+                cache, targetRatesProvider, cacheUpdateProgram
         );
         Rate rate = new Rate(
                 "TEST", "NAME", "TESTNAME", 8, 8, BigDecimal.TEN
@@ -40,7 +40,7 @@ class CurrencyRatesCacheUpdaterTest {
         given(cacheUpdateProgram.getDelay()).willReturn(Long.valueOf(1));
         given(cacheUpdateProgram.getInitialDelay()).willReturn(Long.valueOf(1));
         given(cacheUpdateProgram.getTimeUnit()).willReturn(TimeUnit.SECONDS);
-        given(targetRatesSupplier.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
+        given(targetRatesProvider.getRatesFromTarget()).willReturn(CompletableFuture.completedFuture(List.of(rate)));
 
         cryptoCurrencyRatesCacheUpdater.startProgram();
         await().until(() -> cache.getCryptoCurrencyRate(rate.getPairName()) != null);

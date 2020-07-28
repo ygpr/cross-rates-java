@@ -1,7 +1,7 @@
 package io.github.rates.transform.strategies;
 
-import io.github.rates.suppliers.RatesSupplier;
 import io.github.rates.domain.TransformStrategyType;
+import io.github.rates.suppliers.RatesSupplier;
 
 import java.util.Collections;
 import java.util.Map;
@@ -27,30 +27,6 @@ public class TransformStrategyFactory {
         return transformStrategyFactoryInstance;
     }
 
-    TransformOperations getTransformOperationsFactory() {
-        return TransformOperations.getInstance(ratesSupplier);
-    }
-
-    FiatToFiatTransformStrategy getFiatToFiatTransformStrategy() {
-        return FiatToFiatTransformStrategy.getInstance(getTransformOperationsFactory());
-    }
-
-    CryptoToCryptoTransformStrategy getCryptoToCryptoTransformStrategy() {
-        return CryptoToCryptoTransformStrategy.getInstance(getTransformOperationsFactory());
-    }
-
-    CryptoToFiatTransformStrategy getCryptoToFiatTransformStrategy() {
-        return CryptoToFiatTransformStrategy.getInstance(getTransformOperationsFactory(), getFiatToFiatTransformStrategy());
-    }
-
-    FiatToCryptoTransformStrategy getFiatToCryptoTransformStrategy() {
-        return FiatToCryptoTransformStrategy.getInstance(
-                getTransformOperationsFactory(),
-                getCryptoToCryptoTransformStrategy(),
-                getFiatToFiatTransformStrategy()
-        );
-    }
-
     public Map<TransformStrategyType, TransformStrategy> getTransformStrategiesAsMap() {
         return Collections.unmodifiableMap(Map.of(
                 TransformStrategyType.CRYPTO_TO_CRYPTO, getCryptoToCryptoTransformStrategy(),
@@ -58,6 +34,39 @@ public class TransformStrategyFactory {
                 TransformStrategyType.FIAT_TO_CRYPTO, getFiatToCryptoTransformStrategy(),
                 TransformStrategyType.FIAT_TO_FIAT, getFiatToFiatTransformStrategy()
         ));
+    }
+
+    FiatToFiatTransformStrategy getFiatToFiatTransformStrategy() {
+        return FiatToFiatTransformStrategy.getInstance(getTransformOperationsFactory(), getPrecisionNormalizer());
+    }
+
+    CryptoToCryptoTransformStrategy getCryptoToCryptoTransformStrategy() {
+        return CryptoToCryptoTransformStrategy.getInstance(getTransformOperationsFactory(), getPrecisionNormalizer());
+    }
+
+    CryptoToFiatTransformStrategy getCryptoToFiatTransformStrategy() {
+        return CryptoToFiatTransformStrategy.getInstance(
+                getTransformOperationsFactory(),
+                getPrecisionNormalizer(),
+                getFiatToFiatTransformStrategy()
+        );
+    }
+
+    FiatToCryptoTransformStrategy getFiatToCryptoTransformStrategy() {
+        return FiatToCryptoTransformStrategy.getInstance(
+                getTransformOperationsFactory(),
+                getPrecisionNormalizer(),
+                getCryptoToCryptoTransformStrategy(),
+                getFiatToFiatTransformStrategy()
+        );
+    }
+
+    private TransformOperations getTransformOperationsFactory() {
+        return TransformOperations.getInstance(ratesSupplier);
+    }
+
+    private PrecisionNormalizer getPrecisionNormalizer() {
+        return PrecisionNormalizer.getInstance(ratesSupplier);
     }
 
 }

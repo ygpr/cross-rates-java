@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 class CryptoToFiatTransformStrategyTest {
 
     @Mock
+    private PrecisionNormalizer precisionNormalizer;
+
+    @Mock
     private TransformOperations transformOperations;
 
     @Mock
@@ -48,6 +51,8 @@ class CryptoToFiatTransformStrategyTest {
                 .willReturn(Optional.of(btcToEur));
         given(fiatToFiatTransformStrategy.transform(dashInEur, EURO_TICKER, currencyTo))
                 .willReturn(Optional.of(dashInUSD));
+        given(precisionNormalizer.normalize(dashInUSD, currencyTo)).willReturn(dashInUSD);
+
 
         Optional<BigDecimal> result = cryptoToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -68,6 +73,7 @@ class CryptoToFiatTransformStrategyTest {
                 .willReturn(Optional.of(btcToEurRate));
         given(fiatToFiatTransformStrategy.transform(btcToEur, EURO_TICKER, currencyTo))
                 .willReturn(Optional.of(btcInUSD));
+        given(precisionNormalizer.normalize(btcInUSD, currencyTo)).willReturn(btcInUSD);
 
         Optional<BigDecimal> result = cryptoToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -91,6 +97,7 @@ class CryptoToFiatTransformStrategyTest {
                 .willReturn(Optional.of(btcToEur));
         given(fiatToFiatTransformStrategy.transform(dashInEur, EURO_TICKER, currencyTo))
                 .willReturn(Optional.of(dashInUSD));
+        given(precisionNormalizer.normalize(dashInUSD, currencyTo)).willReturn(dashInUSD);
 
         Optional<BigDecimal> result = cryptoToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -108,6 +115,7 @@ class CryptoToFiatTransformStrategyTest {
 
         given(transformOperations.getCryptoPriceOrTetherEquivalent(BITCOIN_TICKER, EURO_TICKER))
                 .willReturn(Optional.of(btcInEurRate));
+        given(precisionNormalizer.normalize(btcConverted, currencyTo)).willReturn(btcConverted);
 
         Optional<BigDecimal> result = cryptoToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -130,7 +138,7 @@ class CryptoToFiatTransformStrategyTest {
 
         given(transformOperations.getCryptoPriceOrTetherEquivalent(BITCOIN_TICKER, EURO_TICKER))
                 .willReturn(Optional.of(btcInEurRate));
-
+        given(precisionNormalizer.normalize(btcConverted, currencyTo)).willReturn(btcConverted);
 
         BigDecimal result = cryptoToFiatTransformStrategy.transformAsynchronously(amount, currencyFrom, currencyTo)
                 .get(5, TimeUnit.SECONDS);

@@ -16,26 +16,30 @@ class CryptoToFiatTransformStrategy implements TransformStrategy {
 
     private static volatile CryptoToFiatTransformStrategy cryptoToFiatTransformStrategyInstance;
 
+    private final PrecisionNormalizer precisionNormalizer;
     private final TransformOperations transformOperations;
     private final FiatToFiatTransformStrategy fiatToFiatTransformStrategy;
 
     private CryptoToFiatTransformStrategy(
             TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer,
             FiatToFiatTransformStrategy fiatToFiatTransformStrategy
     ) {
         this.transformOperations = transformOperations;
+        this.precisionNormalizer = precisionNormalizer;
         this.fiatToFiatTransformStrategy = fiatToFiatTransformStrategy;
     }
 
     static CryptoToFiatTransformStrategy getInstance(
             TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer,
             FiatToFiatTransformStrategy fiatToFiatTransformStrategy
     ) {
         if (cryptoToFiatTransformStrategyInstance == null) {
             synchronized (CryptoToFiatTransformStrategy.class) {
                 if (cryptoToFiatTransformStrategyInstance == null) {
                     cryptoToFiatTransformStrategyInstance = new CryptoToFiatTransformStrategy(
-                            transformOperations, fiatToFiatTransformStrategy
+                            transformOperations, precisionNormalizer, fiatToFiatTransformStrategy
                     );
                 }
             }
@@ -47,7 +51,8 @@ class CryptoToFiatTransformStrategy implements TransformStrategy {
     public Optional<BigDecimal> transform(BigDecimal amount, String currencyFrom, String currencyTo) {
         return getAmountInBtc(amount, currencyFrom)
                 .flatMap(mapBtcAmountToEuro())
-                .flatMap(getAmountTransformedToRequestedCurrency(currencyFrom, currencyTo));
+                .flatMap(getAmountTransformedToRequestedCurrency(currencyFrom, currencyTo))
+                .map(result -> precisionNormalizer.normalize(result, currencyTo));
     }
 
     @Override
@@ -66,7 +71,7 @@ class CryptoToFiatTransformStrategy implements TransformStrategy {
     private Function<BigDecimal, Optional<BigDecimal>> mapBtcAmountToEuro() {
         return btcAmount -> transformOperations
                 .getCryptoPriceOrTetherEquivalent(BITCOIN_TICKER, EURO_TICKER)
-                .map(CurrencyConvertingDecimal::new )
+                .map(CurrencyConvertingDecimal::new)
                 .map(btcToEur -> btcToEur.multiply(btcAmount));
     }
 

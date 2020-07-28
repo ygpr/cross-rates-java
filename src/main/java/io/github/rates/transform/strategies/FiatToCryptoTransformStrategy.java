@@ -16,22 +16,26 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
 
     private static volatile FiatToCryptoTransformStrategy fiatToCryptoTransformStrategyInstance;
 
+    private final PrecisionNormalizer precisionNormalizer;
     private final TransformOperations transformOperations;
     private final FiatToFiatTransformStrategy fiatToFiatTransformStrategy;
     private final CryptoToCryptoTransformStrategy cryptoToCryptoTransformStrategy;
 
     private FiatToCryptoTransformStrategy(
             TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer,
             CryptoToCryptoTransformStrategy cryptoToCryptoTransformStrategy,
             FiatToFiatTransformStrategy fiatToFiatTransformStrategy
     ) {
         this.transformOperations = transformOperations;
+        this.precisionNormalizer = precisionNormalizer;
         this.cryptoToCryptoTransformStrategy = cryptoToCryptoTransformStrategy;
         this.fiatToFiatTransformStrategy = fiatToFiatTransformStrategy;
     }
 
     static FiatToCryptoTransformStrategy getInstance(
             TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer,
             CryptoToCryptoTransformStrategy cryptoToCryptoTransformStrategy,
             FiatToFiatTransformStrategy fiatToFiatTransformStrategy
     ) {
@@ -39,7 +43,10 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
             synchronized (FiatToCryptoTransformStrategy.class) {
                 if (fiatToCryptoTransformStrategyInstance == null) {
                     fiatToCryptoTransformStrategyInstance = new FiatToCryptoTransformStrategy(
-                            transformOperations, cryptoToCryptoTransformStrategy, fiatToFiatTransformStrategy
+                            transformOperations,
+                            precisionNormalizer,
+                            cryptoToCryptoTransformStrategy,
+                            fiatToFiatTransformStrategy
                     );
                 }
             }
@@ -51,7 +58,8 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
     public Optional<BigDecimal> transform(BigDecimal amount, String currencyFrom, String currencyTo) {
         return getAmountInEur(amount, currencyFrom)
                 .flatMap(mapEurAmountToBtc())
-                .flatMap(getBtcAmountTransformedToRequestedCurrency(currencyTo));
+                .flatMap(getBtcAmountTransformedToRequestedCurrency(currencyTo))
+                .map(result -> precisionNormalizer.normalize(result, currencyTo));
     }
 
     @Override

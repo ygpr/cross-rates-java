@@ -24,6 +24,9 @@ class CryptoToCryptoTransformStrategyTest {
     @Mock
     private TransformOperations transformOperations;
 
+    @Mock
+    private PrecisionNormalizer precisionNormalizer;
+
     @InjectMocks
     private CryptoToCryptoTransformStrategy cryptoToCryptoTransformStrategy;
 
@@ -36,6 +39,7 @@ class CryptoToCryptoTransformStrategyTest {
 
         given(transformOperations.transformCryptoCurrencies(amount, currencyFrom, currencyTo))
                 .willReturn(Optional.of(converted));
+        given(precisionNormalizer.normalize(converted, currencyTo)).willReturn(converted);
 
         Optional<BigDecimal> result = cryptoToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -57,6 +61,7 @@ class CryptoToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(currencyFromInBTC));
         given(transformOperations.transformCryptoCurrencies(currencyFromInBTC, BITCOIN_TICKER, currencyTo))
                 .willReturn(Optional.of(currencyToAmount));
+        given(precisionNormalizer.normalize(currencyToAmount, currencyTo)).willReturn(currencyToAmount);
 
         Optional<BigDecimal> result = cryptoToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -73,7 +78,7 @@ class CryptoToCryptoTransformStrategyTest {
         given(transformOperations.transformCryptoCurrencies(amount, currencyFrom, currencyTo))
                 .willReturn(Optional.empty());
 
-        assertTrue( cryptoToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo).isEmpty());
+        assertTrue(cryptoToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo).isEmpty());
     }
 
 
@@ -91,6 +96,7 @@ class CryptoToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(currencyFromInBTC));
         given(transformOperations.transformCryptoCurrencies(currencyFromInBTC, BITCOIN_TICKER, currencyTo))
                 .willReturn(Optional.of(currencyToAmount));
+        given(precisionNormalizer.normalize(currencyToAmount, currencyTo)).willReturn(currencyToAmount);
 
         BigDecimal result = cryptoToCryptoTransformStrategy.transformAsynchronously(amount, currencyFrom, currencyTo)
                 .get(5, TimeUnit.SECONDS);

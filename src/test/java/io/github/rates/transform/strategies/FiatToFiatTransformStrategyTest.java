@@ -14,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -21,7 +23,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class FiatToFiatTransformStrategyTest {
+
+    @Mock
+    private PrecisionNormalizer precisionNormalizer;
 
     @Mock
     private TransformOperations transformOperations;
@@ -46,6 +52,7 @@ class FiatToFiatTransformStrategyTest {
                 .willReturn(Optional.of(mntToUAHRate));
         given(transformOperations.getRate(currencyTo, UKRAINIAN_HRYVNIA_TICKER))
                 .willReturn(Optional.of(uahToPlnRate));
+        given(precisionNormalizer.normalize(converted, currencyTo)).willReturn(converted);
 
         Optional<BigDecimal> result = fiatToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -65,6 +72,7 @@ class FiatToFiatTransformStrategyTest {
 
         given(transformOperations.getRate(currencyTo, UKRAINIAN_HRYVNIA_TICKER))
                 .willReturn(Optional.of(uahToEgpRate));
+        given(precisionNormalizer.normalize(converted, currencyTo)).willReturn(converted);
 
         Optional<BigDecimal> result = fiatToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -78,13 +86,12 @@ class FiatToFiatTransformStrategyTest {
         String currencyTo = UKRAINIAN_HRYVNIA_TICKER;
         BigDecimal amount = BigDecimal.valueOf(456.123);
         BigDecimal mntToUAHPrice = BigDecimal.valueOf(100);
-        BigDecimal mntToUAH = amount.multiply(mntToUAHPrice);
+        BigDecimal mntToUAH = CurrencyConvertingDecimal.from(amount).multiply(mntToUAHPrice);
 
         Rate mntToUAHRate = new Rate("UAH", "MNT", "UAHMNT", 2, 2, mntToUAHPrice);
 
-        given(transformOperations.getRate(currencyFrom, UKRAINIAN_HRYVNIA_TICKER))
-                .willReturn(Optional.of(mntToUAHRate));
-
+        given(transformOperations.getRate(currencyFrom, UKRAINIAN_HRYVNIA_TICKER)).willReturn(Optional.of(mntToUAHRate));
+        given(precisionNormalizer.normalize(mntToUAH, currencyTo)).willReturn(mntToUAH);
 
         Optional<BigDecimal> result = fiatToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -99,6 +106,7 @@ class FiatToFiatTransformStrategyTest {
         BigDecimal amount = BigDecimal.valueOf(235);
 
         Optional<BigDecimal> result = fiatToFiatTransformStrategy.transform(amount, currencyFrom, currencyTo);
+        given(precisionNormalizer.normalize(amount, currencyTo)).willReturn(amount);
 
         assertTrue(result.isPresent());
         assertThat(amount, Matchers.comparesEqualTo(result.get()));
@@ -115,13 +123,13 @@ class FiatToFiatTransformStrategyTest {
         String currencyTo = UKRAINIAN_HRYVNIA_TICKER;
         BigDecimal amount = BigDecimal.valueOf(456.123);
         BigDecimal mntToUAHPrice = BigDecimal.valueOf(100);
-        BigDecimal mntToUAH = amount.multiply(mntToUAHPrice);
+        BigDecimal mntToUAH = CurrencyConvertingDecimal.from(amount).multiply(mntToUAHPrice);
 
         Rate mntToUAHRate = new Rate("UAH", "MNT", "UAHMNT", 2, 2, mntToUAHPrice);
 
         given(transformOperations.getRate(currencyFrom, UKRAINIAN_HRYVNIA_TICKER))
                 .willReturn(Optional.of(mntToUAHRate));
-
+        given(precisionNormalizer.normalize(mntToUAH, currencyTo)).willReturn(mntToUAH);
 
         BigDecimal result = fiatToFiatTransformStrategy.transformAsynchronously(amount, currencyFrom, currencyTo)
                 .get(5, TimeUnit.SECONDS);

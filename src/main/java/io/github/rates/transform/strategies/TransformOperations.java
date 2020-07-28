@@ -13,7 +13,9 @@ class TransformOperations {
     private static volatile TransformOperations transformOperationsInstance;
 
     static final String BITCOIN_TICKER = "BTC";
+    static final String ETHERIUM_TICKER = "ETH";
     static final String USD_TETHER_TICKER = "USDT";
+    static final String USD_TICKER = "USD";
     static final String EURO_TICKER = "EUR";
     static final String UKRAINIAN_HRYVNIA_TICKER = "UAH";
 

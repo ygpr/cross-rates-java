@@ -14,16 +14,26 @@ class CryptoToCryptoTransformStrategy implements TransformStrategy {
     private static volatile CryptoToCryptoTransformStrategy cryptoToCryptoTransformStrategyInstance;
 
     private final TransformOperations transformOperations;
+    private final PrecisionNormalizer precisionNormalizer;
 
-    private CryptoToCryptoTransformStrategy(TransformOperations transformOperations) {
+    private CryptoToCryptoTransformStrategy(
+            TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer
+    ) {
         this.transformOperations = transformOperations;
+        this.precisionNormalizer = precisionNormalizer;
     }
 
-    static CryptoToCryptoTransformStrategy getInstance(TransformOperations transformOperations) {
+    static CryptoToCryptoTransformStrategy getInstance(
+            TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer
+    ) {
         if (cryptoToCryptoTransformStrategyInstance == null) {
             synchronized (CryptoToCryptoTransformStrategy.class) {
                 if (cryptoToCryptoTransformStrategyInstance == null) {
-                    cryptoToCryptoTransformStrategyInstance = new CryptoToCryptoTransformStrategy(transformOperations);
+                    cryptoToCryptoTransformStrategyInstance = new CryptoToCryptoTransformStrategy(
+                            transformOperations, precisionNormalizer
+                    );
                 }
             }
         }
@@ -33,7 +43,8 @@ class CryptoToCryptoTransformStrategy implements TransformStrategy {
     @Override
     public Optional<BigDecimal> transform(BigDecimal amount, String currencyFrom, String currencyTo) {
         return transformOperations.transformCryptoCurrencies(amount, currencyFrom, currencyTo)
-                .or(() -> convertViaBitcoin(amount, currencyFrom, currencyTo));
+                .or(() -> convertViaBitcoin(amount, currencyFrom, currencyTo))
+                .map(result -> precisionNormalizer.normalize(result, currencyTo));
     }
 
     @Override

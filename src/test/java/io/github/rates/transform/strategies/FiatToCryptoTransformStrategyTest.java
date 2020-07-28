@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 class FiatToCryptoTransformStrategyTest {
 
     @Mock
+    private PrecisionNormalizer precisionNormalizer;
+
+    @Mock
     private TransformOperations transformOperations;
 
     @Mock
@@ -51,6 +54,7 @@ class FiatToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(btcToEuroPrice));
         given(cryptoToCryptoTransformStrategy.transform(btcAmount, BITCOIN_TICKER, currencyTo))
                 .willReturn(Optional.of(btcInXRPAmount));
+        given(precisionNormalizer.normalize(btcInXRPAmount, currencyTo)).willReturn(btcInXRPAmount);
 
         Optional<BigDecimal> result = fiatToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -71,6 +75,7 @@ class FiatToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(btcToEuroPrice));
         given(cryptoToCryptoTransformStrategy.transform(btcAmount, BITCOIN_TICKER, currencyTo))
                 .willReturn(Optional.of(btcInXRPAmount));
+        given(precisionNormalizer.normalize(btcInXRPAmount, currencyTo)).willReturn(btcInXRPAmount);
 
         Optional<BigDecimal> result = fiatToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -91,6 +96,7 @@ class FiatToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(currencyFromToEur));
         given(transformOperations.getCryptoPriceOrTetherEquivalent(BITCOIN_TICKER, EURO_TICKER))
                 .willReturn(Optional.of(btcToEuroPrice));
+        given(precisionNormalizer.normalize(btcAmount, currencyTo)).willReturn(btcAmount);
 
         Optional<BigDecimal> result = fiatToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo);
 
@@ -129,6 +135,7 @@ class FiatToCryptoTransformStrategyTest {
                 .willReturn(Optional.of(btcToEuroPrice));
         given(cryptoToCryptoTransformStrategy.transform(btcAmount, BITCOIN_TICKER, currencyTo))
                 .willReturn(Optional.of(btcInXRPAmount));
+        given(precisionNormalizer.normalize(btcInXRPAmount, currencyTo)).willReturn(btcInXRPAmount);
 
         BigDecimal result = fiatToCryptoTransformStrategy.transformAsynchronously(amount, currencyFrom, currencyTo)
                 .get(5, TimeUnit.SECONDS);

@@ -16,17 +16,27 @@ class FiatToFiatTransformStrategy implements TransformStrategy {
 
     private static volatile FiatToFiatTransformStrategy fiatToFiatTransformStrategyInstance;
 
+    private final PrecisionNormalizer precisionNormalizer;
     private final TransformOperations transformOperations;
 
-    private FiatToFiatTransformStrategy(TransformOperations transformOperations) {
+    private FiatToFiatTransformStrategy(
+            TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer
+    ) {
         this.transformOperations = transformOperations;
+        this.precisionNormalizer = precisionNormalizer;
     }
 
-    static FiatToFiatTransformStrategy getInstance(TransformOperations transformOperations) {
+    static FiatToFiatTransformStrategy getInstance(
+            TransformOperations transformOperations,
+            PrecisionNormalizer precisionNormalizer
+    ) {
         if (fiatToFiatTransformStrategyInstance == null) {
             synchronized (FiatToFiatTransformStrategy.class) {
                 if (fiatToFiatTransformStrategyInstance == null) {
-                    fiatToFiatTransformStrategyInstance = new FiatToFiatTransformStrategy(transformOperations);
+                    fiatToFiatTransformStrategyInstance = new FiatToFiatTransformStrategy(
+                            transformOperations, precisionNormalizer
+                    );
                 }
             }
         }
@@ -38,7 +48,9 @@ class FiatToFiatTransformStrategy implements TransformStrategy {
         if (currencyFrom.equalsIgnoreCase(currencyTo)) {
             return Optional.of(amount);
         }
-        return getAmountInUah(amount, currencyFrom).flatMap(getAmountInHryvniaTransformedTo(currencyTo));
+        return getAmountInUah(amount, currencyFrom)
+                .flatMap(getAmountInHryvniaTransformedTo(currencyTo))
+                .map(result -> precisionNormalizer.normalize(result, currencyTo));
     }
 
     @Override

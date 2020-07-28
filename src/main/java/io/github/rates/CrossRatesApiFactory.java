@@ -1,12 +1,12 @@
 package io.github.rates;
 
-import io.github.rates.cache.CurrencyRatesCacheUpdater;
 import io.github.rates.cache.CurrencyRatesCache;
+import io.github.rates.cache.CurrencyRatesCacheUpdater;
 import io.github.rates.configurations.CacheUpdateProgram;
-import io.github.rates.suppliers.BinanceTargetRatesSupplier;
-import io.github.rates.suppliers.MonobankTargetRatesSupplier;
-import io.github.rates.suppliers.RateConverterSupplier;
-import io.github.rates.suppliers.RatesConvertingSupplier;
+import io.github.rates.suppliers.BinanceTargetRatesProvider;
+import io.github.rates.suppliers.CachedRatesSupplier;
+import io.github.rates.suppliers.MonobankTargetRatesProvider;
+import io.github.rates.suppliers.RatesSupplier;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CrossRatesApiFactory {
 
-    public RateConverterSupplier buildDefault() {
+    public RatesSupplier buildDefault() {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         return build(
                 executorService,
@@ -22,15 +22,15 @@ public class CrossRatesApiFactory {
         );
     }
 
-    public RateConverterSupplier build(ScheduledExecutorService executorService, CacheUpdateProgram program) {
+    public RatesSupplier build(ScheduledExecutorService executorService, CacheUpdateProgram program) {
         CurrencyRatesCache cache = new CurrencyRatesCache();
         new CurrencyRatesCacheUpdater(
-                cache, new BinanceTargetRatesSupplier(), program
+                cache, new BinanceTargetRatesProvider(), program
         ).startProgram();
         new CurrencyRatesCacheUpdater(
-                cache, new MonobankTargetRatesSupplier(), program
+                cache, new MonobankTargetRatesProvider(), program
         ).startProgram();
-        return new RatesConvertingSupplier(cache, executorService);
+        return new CachedRatesSupplier(cache, executorService);
     }
 
 }

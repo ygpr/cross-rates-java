@@ -2,6 +2,7 @@ package io.github.rates.suppliers.transformers.strategies;
 
 import static io.github.rates.suppliers.transformers.TransformStrategyType.CRYPTO_TO_CRYPTO;
 import static io.github.rates.suppliers.transformers.strategies.TransformOperations.BITCOIN_TICKER;
+import static io.github.rates.suppliers.transformers.strategies.TransformOperations.EURO_TICKER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -63,6 +64,19 @@ class CryptoToCryptoTransformStrategyTest {
         assertTrue(result.isPresent());
         assertThat(currencyToAmount, Matchers.comparesEqualTo(result.get()));
     }
+
+    @Test
+    void transform_withoutResult() {
+        String currencyFrom = "TEST";
+        String currencyTo = "TEST";
+        BigDecimal amount = BigDecimal.valueOf(32);
+
+        given(transformOperations.transformCryptoCurrencies(amount, currencyFrom, currencyTo))
+                .willReturn(Optional.empty());
+
+        assertTrue( cryptoToCryptoTransformStrategy.transform(amount, currencyFrom, currencyTo).isEmpty());
+    }
+
 
     @Test
     void transformAsynchronously() throws Exception {

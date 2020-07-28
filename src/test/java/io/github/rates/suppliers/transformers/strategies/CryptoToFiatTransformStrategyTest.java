@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @ExtendWith({MockitoExtension.class})
 class CryptoToFiatTransformStrategyTest {
@@ -122,7 +121,7 @@ class CryptoToFiatTransformStrategyTest {
     }
 
     @Test
-    void transformAsynchronously() throws InterruptedException, ExecutionException, TimeoutException {
+    void transformAsynchronously() throws Exception {
         String currencyFrom = BITCOIN_TICKER;
         String currencyTo = EURO_TICKER;
         BigDecimal amount = BigDecimal.valueOf(1);

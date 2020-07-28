@@ -5,16 +5,16 @@ import static io.github.rates.suppliers.transformers.strategies.TransformOperati
 import static io.github.rates.suppliers.transformers.strategies.TransformOperations.EURO_TICKER;
 
 import io.github.rates.suppliers.transformers.TransformStrategyType;
+import io.github.rates.tools.math.CurrencyConvertingDecimal;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 class FiatToCryptoTransformStrategy implements TransformStrategy {
 
-    private static FiatToCryptoTransformStrategy fiatToCryptoTransformStrategyInstance;
+    private static volatile FiatToCryptoTransformStrategy fiatToCryptoTransformStrategyInstance;
 
     private final TransformOperations transformOperations;
     private final FiatToFiatTransformStrategy fiatToFiatTransformStrategy;
@@ -36,7 +36,7 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
             FiatToFiatTransformStrategy fiatToFiatTransformStrategy
     ) {
         if (fiatToCryptoTransformStrategyInstance == null) {
-            synchronized (CryptoToFiatTransformStrategy.class) {
+            synchronized (FiatToCryptoTransformStrategy.class) {
                 if (fiatToCryptoTransformStrategyInstance == null) {
                     fiatToCryptoTransformStrategyInstance = new FiatToCryptoTransformStrategy(
                             transformOperations, cryptoToCryptoTransformStrategy, fiatToFiatTransformStrategy
@@ -57,7 +57,9 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
     @Override
     public CompletableFuture<BigDecimal> transformAsynchronously(BigDecimal amount, String currencyFrom, String currencyTo) {
         return CompletableFuture.supplyAsync(() -> transform(amount, currencyFrom, currencyTo)
-                .orElseThrow(() -> new RuntimeException(String.format("Can't transform %s to %s, one of currencies not found", currencyFrom, currencyTo))));
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Can't transform %s to %s, one of currencies not found", currencyFrom, currencyTo)
+                )));
     }
 
     @Override
@@ -68,7 +70,7 @@ class FiatToCryptoTransformStrategy implements TransformStrategy {
     private Function<BigDecimal, Optional<BigDecimal>> mapEurAmountToBtc() {
         return eurAmount -> transformOperations
                 .getCryptoPriceOrTetherEquivalent(BITCOIN_TICKER, EURO_TICKER)
-                .map(btcToEurPrice -> eurAmount.divide(btcToEurPrice, 20, RoundingMode.HALF_EVEN).stripTrailingZeros());
+                .map(btcToEurPrice -> CurrencyConvertingDecimal.from(eurAmount).divideWithDefaultScaling(btcToEurPrice));
     }
 
     private Optional<BigDecimal> getAmountInEur(BigDecimal amount, String currencyFrom) {

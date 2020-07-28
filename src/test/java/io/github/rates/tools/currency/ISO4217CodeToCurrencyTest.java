@@ -9,7 +9,7 @@ import java.util.Optional;
 
 class ISO4217CodeToCurrencyTest {
 
-    ISO4217CodeToCurrency codeToCurrency = ISO4217CodeToCurrency.getInstance();
+   private ISO4217CodeToCurrency codeToCurrency = ISO4217CodeToCurrency.getInstance();
 
     @Test
     void getSymbolByCode() {

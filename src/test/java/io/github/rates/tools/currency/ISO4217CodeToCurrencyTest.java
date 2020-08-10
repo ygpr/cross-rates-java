@@ -1,7 +1,6 @@
 package io.github.rates.tools.currency;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,7 @@ import java.util.Optional;
 
 class ISO4217CodeToCurrencyTest {
 
-    ISO4217CodeToCurrency codeToCurrency = new ISO4217CodeToCurrency();
+   private ISO4217CodeToCurrency codeToCurrency = ISO4217CodeToCurrency.getInstance();
 
     @Test
     void getSymbolByCode() {
@@ -33,5 +32,15 @@ class ISO4217CodeToCurrencyTest {
     @Test
     void getSymbolByCode_symbolInBlackList_shouldReturnEmptyResult() {
         assertTrue(codeToCurrency.getCurrencyTickerByCode(0).isEmpty());
+    }
+
+    @Test
+    void isFiat_true() {
+        assertTrue(codeToCurrency.isFiat("usd"));
+    }
+
+    @Test
+    void isFiat_false() {
+        assertFalse(codeToCurrency.isFiat("USDD"));
     }
 }

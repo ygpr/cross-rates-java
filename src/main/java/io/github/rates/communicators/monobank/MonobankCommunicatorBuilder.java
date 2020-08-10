@@ -12,7 +12,7 @@ public class MonobankCommunicatorBuilder {
 
     private static MonobankResponseToModelMapper createModelMapper() {
         return new MonobankResponseToModelMapper(
-                new ISO4217CodeToCurrency(),
+                ISO4217CodeToCurrency.getInstance(),
                 new MonobankRatePriceFromResponseCalculator()
         );
     }

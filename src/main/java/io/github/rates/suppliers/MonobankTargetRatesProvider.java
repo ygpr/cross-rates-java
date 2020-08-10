@@ -2,9 +2,9 @@ package io.github.rates.suppliers;
 
 import io.github.rates.communicators.monobank.MonobankCommunicatorBuilder;
 
-public class MonobankTargetRatesSupplier extends TargetRatesSupplier {
+public class MonobankTargetRatesProvider extends TargetRatesProvider {
 
-    public MonobankTargetRatesSupplier() {
+    public MonobankTargetRatesProvider() {
         super(MonobankCommunicatorBuilder.newMonobankRatesProvidingCommunicator());
     }
 

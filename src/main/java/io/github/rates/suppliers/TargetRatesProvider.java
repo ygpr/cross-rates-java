@@ -6,11 +6,11 @@ import io.github.rates.domain.Rate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public abstract class TargetRatesSupplier {
+public abstract class TargetRatesProvider {
 
     private final RatesProvidingCommunicator ratesProvidingCommunicator;
 
-    TargetRatesSupplier(RatesProvidingCommunicator ratesProvidingCommunicator) {
+    TargetRatesProvider(RatesProvidingCommunicator ratesProvidingCommunicator) {
         this.ratesProvidingCommunicator = ratesProvidingCommunicator;
 
     }

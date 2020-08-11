@@ -26,7 +26,7 @@ class CachedRatesSupplierTest {
     @BeforeEach
     void setUp() {
         cache.clear();
-        cache.updateCryptoCurrenciesRates(List.of(rate));
+        cache.updateCurrenciesRates(List.of(rate));
     }
 
     @Test

@@ -28,15 +28,15 @@ class BinanceResponsesToModelMapper {
     }
 
     private Rate mapToRate(BinanceRateResponse binanceRateResponse, SymbolResponse symbolResponse) {
-        return symbolResponse == null
-                ? null
-                : new Rate(
+        return symbolResponse == null ? null : new Rate(
                 symbolResponse.getBaseAsset(),
                 symbolResponse.getQuoteAsset(),
                 symbolResponse.getPairName(),
                 symbolResponse.getBaseAssetPrecision(),
                 symbolResponse.getQuotePrecision(),
-                binanceRateResponse.getPrice());
+                binanceRateResponse.getPrice(),
+                true
+        );
     }
 
     private <T extends PairNameIdentifier> Map<String, T> getMapWithKeysByPairName(List<T> responses) {

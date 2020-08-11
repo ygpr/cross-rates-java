@@ -34,26 +34,30 @@ class MonobankResponseToModelMapper {
 
     private Rate mapToRate(MonobankRateResponse monobankRateResponse) {
         Entry<Currency, Currency> currencies = getCurrencies(monobankRateResponse);
-        return isBothCurrenciesPresent(currencies) ? createRateFromReceivedData(monobankRateResponse, currencies) : null;
+        return isBothCurrenciesPresent(currencies)
+                ? createRateFromReceivedData(monobankRateResponse, currencies) : null;
     }
 
-    private Rate createRateFromReceivedData(MonobankRateResponse monobankRateResponse, Entry<Currency, Currency> currencies) {
+    private Rate createRateFromReceivedData(
+            MonobankRateResponse monobankRateResponse, Entry<Currency, Currency> currencies
+    ) {
         return new Rate(
                 currencies.getKey().getCurrencyCode(),
                 currencies.getValue().getCurrencyCode(),
                 currencies.getKey().getCurrencyCode().concat(currencies.getValue().getCurrencyCode()),
                 currencies.getKey().getDefaultFractionDigits(),
                 currencies.getValue().getDefaultFractionDigits(),
-                ratePriceFromResponseCalculator.getRatePrice(monobankRateResponse)
+                ratePriceFromResponseCalculator.getRatePrice(monobankRateResponse),
+                false
         );
     }
 
     private boolean isBothCurrenciesPresent(Entry<Currency, Currency> currenciesEntry) {
-        return currenciesEntry.getKey() != null && currenciesEntry.getValue() != null;
+        return (currenciesEntry.getKey() != null) && (currenciesEntry.getValue() != null);
     }
 
     private Entry<Currency, Currency> getCurrencies(MonobankRateResponse monobankRateResponse) {
-        return new SimpleImmutableEntry<Currency, Currency>(
+        return new SimpleImmutableEntry<>(
                 getCurrencyTickerByCode(monobankRateResponse.getCurrencyCodeA()),
                 getCurrencyTickerByCode(monobankRateResponse.getCurrencyCodeB())
         );

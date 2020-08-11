@@ -30,6 +30,6 @@ public class CurrencyRatesCacheUpdater {
 
     private Runnable getRatesAndCallUpdate() {
         return () -> targetRatesProvider.getRatesFromTarget()
-                .thenAccept(currencyRatesCache::updateCryptoCurrenciesRates);
+                .thenAccept(currencyRatesCache::updateCurrenciesRates);
     }
 }

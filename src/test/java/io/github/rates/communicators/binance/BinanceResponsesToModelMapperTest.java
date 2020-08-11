@@ -25,7 +25,7 @@ class BinanceResponsesToModelMapperTest {
 
         SymbolResponse symbolResponse = new SymbolResponse(pairName, asset, quotable, precision, precision);
         BinanceRateResponse rateResponse = new BinanceRateResponse(asset + quotable, price);
-        Rate expectedRate = new Rate(asset, quotable, pairName, precision, precision, price);
+        Rate expectedRate = new Rate(asset, quotable, pairName, precision, precision, price, true);
 
         assertEquals(List.of(expectedRate), modelMapper.mapToRate(List.of(rateResponse), List.of(symbolResponse)));
     }

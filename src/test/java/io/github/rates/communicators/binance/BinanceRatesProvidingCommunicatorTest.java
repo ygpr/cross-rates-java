@@ -39,7 +39,7 @@ class BinanceRatesProvidingCommunicatorTest {
 
         SymbolResponse symbolResponse = new SymbolResponse(asset + quotable, asset, quotable, 8, 8);
         BinanceRateResponse rateResponse = new BinanceRateResponse(asset + quotable, price);
-        Rate rate = new Rate(asset, quotable, asset + quotable, 8, 8, price);
+        Rate rate = new Rate(asset, quotable, asset + quotable, 8, 8, price, true);
 
         given(binanceApi.sendRequestForRates()).willReturn(CompletableFuture.completedFuture(List.of(rateResponse)));
         given(binanceApi.sendRequestForExchangeInfo()).willReturn(CompletableFuture.completedFuture(new ExchangeInfoResponse(List.of(symbolResponse))));

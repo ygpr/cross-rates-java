@@ -31,7 +31,9 @@ class BinanceRatesProvidingCommunicator implements RatesProvidingCommunicator {
     }
 
     private BiFunction<List<BinanceRateResponse>, ExchangeInfoResponse, List<Rate>> mapResponsesToRate() {
-        return (rateResponses, exchangeInfoResponse) -> modelMapper.mapToRate(rateResponses, exchangeInfoResponse.getSymbols());
+        return (rateResponses, exchangeInfoResponse) -> modelMapper.mapToRate(
+                rateResponses, exchangeInfoResponse.getSymbols()
+        );
     }
 
 }

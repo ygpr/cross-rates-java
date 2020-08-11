@@ -3,6 +3,7 @@ package io.github.rates.suppliers;
 import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.domain.Rate;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
 
@@ -26,6 +27,12 @@ public class CachedRatesSupplier implements RatesSupplier {
         return ratesCache.getCryptoCurrencyRateAsync(asset + quotable);
     }
 
+
+    @Override
+    public CompletableFuture<Optional<Rate>> getRateAsync(String asset, String quotable) {
+        return ratesCache.findCryptoCurrencyRateAsync(asset + quotable);
+    }
+
     @Override
     public CompletableFuture<Rate> getRateAsynchronously(String asset, String quotable, long delayInSeconds) {
         return CompletableFuture.supplyAsync(
@@ -42,4 +49,13 @@ public class CachedRatesSupplier implements RatesSupplier {
         return runnable -> executorService.schedule(() -> executor.execute(runnable), delayInSeconds, unit);
     }
 
+    @Override
+    public List<String> getFiatCurrencies() {
+        return ratesCache.getFiatCurrencies();
+    }
+
+    @Override
+    public List<String> getCryptoCurrencies() {
+        return ratesCache.getCryptoCurrencies();
+    }
 }

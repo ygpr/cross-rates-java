@@ -18,7 +18,7 @@ class CurrencyRatesCacheTest {
         Rate rate = new Rate("test", "test", "test", 4, 5, BigDecimal.TEN);
         CurrencyRatesCache cache = new CurrencyRatesCache();
 
-        cache.updateCryptoCurrenciesRates(List.of(rate));
+        cache.updateCurrenciesRates(List.of(rate));
 
         assertEquals(rate, cache.getCryptoCurrencyRate(rate.getPairName()));
     }
@@ -29,8 +29,8 @@ class CurrencyRatesCacheTest {
         Rate newRate = new Rate("test", "test", "test", 1, 1, BigDecimal.ONE);
         CurrencyRatesCache cache = new CurrencyRatesCache();
 
-        cache.updateCryptoCurrenciesRates(List.of(oldRate));
-        cache.updateCryptoCurrenciesRates(List.of(newRate));
+        cache.updateCurrenciesRates(List.of(oldRate));
+        cache.updateCurrenciesRates(List.of(newRate));
 
         assertEquals(newRate, cache.getCryptoCurrencyRate(oldRate.getPairName()));
     }
@@ -41,7 +41,7 @@ class CurrencyRatesCacheTest {
         Rate rate = new Rate("btc", "eth", "btceth", 5, 6, BigDecimal.valueOf(23942.234));
         CurrencyRatesCache cache = new CurrencyRatesCache();
 
-        cache.updateCryptoCurrenciesRates(List.of(rate));
+        cache.updateCurrenciesRates(List.of(rate));
 
         assertEquals(rate, cache.getCryptoCurrencyRate(pairName));
     }
@@ -59,7 +59,7 @@ class CurrencyRatesCacheTest {
         Rate rate = new Rate("test", "test", "test", 7, 7, BigDecimal.TEN);
         CurrencyRatesCache cache = new CurrencyRatesCache();
 
-        cache.updateCryptoCurrenciesRates(List.of(rate));
+        cache.updateCurrenciesRates(List.of(rate));
 
         assertEquals(rate, cache.getCryptoCurrencyRate(rate.getPairName()));
 

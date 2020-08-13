@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class DefaultCrossRatesAPI implements CrossRatesAPI {
 
@@ -32,7 +33,7 @@ public class DefaultCrossRatesAPI implements CrossRatesAPI {
     public List<String> getCurrencies() {
         List<String> currencies = new ArrayList<>(getFiatCurrencies());
         currencies.addAll(getCryptoCurrencies());
-        return currencies;
+        return currencies.stream().distinct().sorted().collect(Collectors.toList());
     }
 
     @Override

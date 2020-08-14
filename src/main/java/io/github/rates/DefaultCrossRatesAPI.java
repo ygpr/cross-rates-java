@@ -1,23 +1,36 @@
-package io.github.rates.impl;
+package io.github.rates;
 
-import io.github.rates.CrossRatesAPI;
 import io.github.rates.domain.Rate;
 import io.github.rates.suppliers.RatesSupplier;
+import io.github.rates.transform.TransformExecutorsFactory;
+import io.github.rates.transform.TransformStrategiesExecutor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class DefaultCrossRatesAPI implements CrossRatesAPI {
+class DefaultCrossRatesAPI implements CrossRatesAPI {
 
     private final RatesSupplier ratesSupplier;
+    private final TransformStrategiesExecutor strategiesExecutor;
 
-    public DefaultCrossRatesAPI(RatesSupplier ratesSupplier) {
+    DefaultCrossRatesAPI(RatesSupplier ratesSupplier) {
         this.ratesSupplier = ratesSupplier;
+        this.strategiesExecutor = TransformExecutorsFactory.buildWith(ratesSupplier);
     }
 
+    @Override
+    public CompletableFuture<BigDecimal> transformAsync(BigDecimal amount, String currencyFrom, String currencyTo) {
+        return strategiesExecutor.transformAsync(amount, currencyFrom, currencyTo);
+    }
+
+    @Override
+    public Optional<BigDecimal> transform(BigDecimal amount, String currencyFrom, String currencyTo) {
+        return strategiesExecutor.transform(amount, currencyFrom, currencyTo);
+    }
 
     @Override
     public Optional<Rate> getRate(String asset, String quotable) {

@@ -37,15 +37,17 @@ class PrecisionNormalizer {
     }
 
     BigDecimal normalize(BigDecimal toNormalize, String sourceCurrency) {
-        return isSourceCurrencyIsFiat(sourceCurrency)
-                ? normalizeFiat(toNormalize, sourceCurrency)
-                : normalizeCrypto(toNormalize, sourceCurrency);
+        return toNormalize.setScale(16, RoundingMode.HALF_UP);
+        // fixme: decide what to do with fiat currencies, 2 digits after decimal point is too little on multiplying
+//        return isSourceCurrencyIsFiat(sourceCurrency)
+//                ? normalizeFiat(toNormalize, sourceCurrency)
+//                : normalizeCrypto(toNormalize, sourceCurrency);
     }
 
     private BigDecimal normalizeFiat(BigDecimal toNormalize, String sourceCurrency) {
         return getFiatSourceRate(sourceCurrency)
                 .map(Rate::getAssetPrecision)
-                .map(precision -> toNormalize.setScale(precision, RoundingMode.HALF_EVEN))
+                .map(precision -> toNormalize.setScale(precision, RoundingMode.HALF_UP))
                 .orElse(toNormalize);
     }
 
@@ -56,7 +58,7 @@ class PrecisionNormalizer {
                 .findFirst()
                 .map(Optional::get)
                 .map(Rate::getAssetPrecision)
-                .map(precision -> toNormalize.setScale(precision, RoundingMode.HALF_EVEN))
+                .map(precision -> toNormalize.setScale(precision, RoundingMode.HALF_UP))
                 .orElse(toNormalize);
     }
 

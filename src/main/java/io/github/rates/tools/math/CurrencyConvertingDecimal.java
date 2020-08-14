@@ -7,7 +7,7 @@ import java.math.RoundingMode;
 public class CurrencyConvertingDecimal extends BigDecimal {
 
     private static int SCALE = 20;
-    private static RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
+    private static RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
     private static MathContext context = new MathContext(SCALE, ROUNDING_MODE);
 
     public CurrencyConvertingDecimal(String val) {

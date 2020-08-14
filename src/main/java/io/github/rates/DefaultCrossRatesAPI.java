@@ -34,12 +34,18 @@ class DefaultCrossRatesAPI implements CrossRatesAPI {
 
     @Override
     public Optional<Rate> getRate(String asset, String quotable) {
-        return ratesSupplier.getRate(asset, quotable);
+        return strategiesExecutor.transform(BigDecimal.ONE, asset, quotable)
+                .map(price -> new Rate(
+                        asset, quotable, asset + quotable, 8, 8, price
+                ));
     }
 
     @Override
     public CompletableFuture<Optional<Rate>> getRateAsync(String asset, String quotable) {
-        return ratesSupplier.getRateAsync(asset, quotable);
+        return strategiesExecutor.transformAsync(BigDecimal.ONE, asset, quotable)
+                .thenApply(price -> Optional.of(new Rate(
+                        asset, quotable, asset + quotable, 8, 8, price
+                )));
     }
 
     @Override

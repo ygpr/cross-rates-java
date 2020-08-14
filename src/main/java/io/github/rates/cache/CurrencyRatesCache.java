@@ -64,7 +64,7 @@ public class CurrencyRatesCache {
                 .filter(Rate::isCrypto)
                 .flatMap(rate -> Stream.of(rate.getAsset(), rate.getQuotable()))
                 .distinct()
-                .filter(Predicate.not(currency -> fiatCurrencies.contains(currency)))
+                .filter(Predicate.not(fiatCurrencies::contains))
                 .sorted()
                 .collect(Collectors.toList());
     }

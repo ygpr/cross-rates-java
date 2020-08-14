@@ -3,7 +3,6 @@ package io.github.rates;
 import io.github.rates.cache.CurrencyRatesCache;
 import io.github.rates.cache.CurrencyRatesCacheUpdater;
 import io.github.rates.configurations.CacheUpdateProgram;
-import io.github.rates.impl.DefaultCrossRatesAPI;
 import io.github.rates.suppliers.BinanceTargetRatesProvider;
 import io.github.rates.suppliers.CachedRatesSupplier;
 import io.github.rates.suppliers.MonobankTargetRatesProvider;

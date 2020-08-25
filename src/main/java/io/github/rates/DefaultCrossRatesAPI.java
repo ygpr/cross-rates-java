@@ -12,12 +12,12 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-class DefaultCrossRatesAPI implements CrossRatesAPI {
+public class DefaultCrossRatesAPI implements CrossRatesAPI {
 
     private final RatesSupplier ratesSupplier;
     private final TransformStrategiesExecutor strategiesExecutor;
 
-    DefaultCrossRatesAPI(RatesSupplier ratesSupplier) {
+    public DefaultCrossRatesAPI(RatesSupplier ratesSupplier) {
         this.ratesSupplier = ratesSupplier;
         this.strategiesExecutor = TransformExecutorsFactory.buildWith(ratesSupplier);
     }

@@ -15,36 +15,46 @@ public class CrossRatesApiFactory {
 
     public CrossRatesAPI buildDefault() {
         ScheduledExecutorService executorService = getDefaultScheduledExecutorService();
-        return build(
-                executorService,
-                new CacheUpdateProgram(executorService, 0L, 1L, TimeUnit.MINUTES)
-        );
+        return build(executorService, getDefaultProgram(executorService));
+    }
+
+    private CacheUpdateProgram getDefaultProgram(ScheduledExecutorService executorService) {
+        return new CacheUpdateProgram(executorService, 0L, 1L, TimeUnit.MINUTES);
     }
 
     private ScheduledExecutorService getDefaultScheduledExecutorService() {
         return Executors.newSingleThreadScheduledExecutor();
     }
 
-    public CrossRatesAPI build(ScheduledExecutorService executorService, CacheUpdateProgram program) {
-        CurrencyRatesCache cache = new CurrencyRatesCache();
-        new CurrencyRatesCacheUpdater(
-                cache, new BinanceTargetRatesProvider(), program
-        ).startProgram();
-        new CurrencyRatesCacheUpdater(
-                cache, new MonobankTargetRatesProvider(), program
-        ).startProgram();
-        return new DefaultCrossRatesAPI(new CachedRatesSupplier(cache, executorService));
+    public CrossRatesAPI build(ScheduledExecutorService executorService) {
+        return build(executorService, getDefaultProgram(executorService));
     }
 
     public CrossRatesAPI build(CacheUpdateProgram program) {
+        return build(getDefaultScheduledExecutorService(), program);
+    }
+
+    public CrossRatesAPI build(ScheduledExecutorService executorService, CacheUpdateProgram program) {
+        return build(executorService, program, program);
+    }
+
+    public CrossRatesAPI build(CacheUpdateProgram fiatProgram, CacheUpdateProgram cryptoProgram) {
+        return build(getDefaultScheduledExecutorService(), fiatProgram, cryptoProgram);
+    }
+
+    public CrossRatesAPI build(
+            ScheduledExecutorService executorService,
+            CacheUpdateProgram fiatProgram,
+            CacheUpdateProgram cryptoProgram
+    ) {
         CurrencyRatesCache cache = new CurrencyRatesCache();
         new CurrencyRatesCacheUpdater(
-                cache, new BinanceTargetRatesProvider(), program
+                cache, new BinanceTargetRatesProvider(), cryptoProgram
         ).startProgram();
         new CurrencyRatesCacheUpdater(
-                cache, new MonobankTargetRatesProvider(), program
+                cache, new MonobankTargetRatesProvider(), fiatProgram
         ).startProgram();
-        return new DefaultCrossRatesAPI(new CachedRatesSupplier(cache, getDefaultScheduledExecutorService()));
+        return new DefaultCrossRatesAPI(new CachedRatesSupplier(cache, executorService));
     }
 
 }

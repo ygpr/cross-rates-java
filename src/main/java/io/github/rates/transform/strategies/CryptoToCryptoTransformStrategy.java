@@ -2,6 +2,7 @@ package io.github.rates.transform.strategies;
 
 import static io.github.rates.domain.TransformStrategyType.CRYPTO_TO_CRYPTO;
 import static io.github.rates.transform.strategies.TransformOperations.BITCOIN_TICKER;
+import static io.github.rates.transform.strategies.TransformOperations.USD_TETHER_TICKER;
 
 import io.github.rates.domain.TransformStrategyType;
 
@@ -43,7 +44,7 @@ class CryptoToCryptoTransformStrategy implements TransformStrategy {
     @Override
     public Optional<BigDecimal> transform(BigDecimal amount, String currencyFrom, String currencyTo) {
         return transformOperations.transformCryptoCurrencies(amount, currencyFrom, currencyTo)
-                .or(() -> convertViaBitcoin(amount, currencyFrom, currencyTo))
+                .or(() -> convertViaUsdtcoin(amount, currencyFrom, currencyTo))
                 .map(result -> precisionNormalizer.normalize(result, currencyTo));
     }
 
@@ -61,10 +62,10 @@ class CryptoToCryptoTransformStrategy implements TransformStrategy {
     }
 
 
-    private Optional<BigDecimal> convertViaBitcoin(BigDecimal amount, String currencyFrom, String currencyTo) {
+    private Optional<BigDecimal> convertViaUsdtcoin(BigDecimal amount, String currencyFrom, String currencyTo) {
         return transformOperations
-                .transformCryptoCurrencies(amount, currencyFrom, BITCOIN_TICKER)
-                .flatMap(toBtcPrice -> transformOperations.transformCryptoCurrencies(toBtcPrice, BITCOIN_TICKER, currencyTo));
+                .transformCryptoCurrencies(amount, currencyFrom, USD_TETHER_TICKER)
+                .flatMap(toUsdtPrice -> transformOperations.transformCryptoCurrencies(toUsdtPrice, USD_TETHER_TICKER, currencyTo));
     }
 
 }
